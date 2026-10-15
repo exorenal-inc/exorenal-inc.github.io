@@ -658,3 +658,24 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .nfilter button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 .nfilter button[aria-pressed="true"] small { color: rgba(255,255,255,.6); }
 .news3 > [hidden] { display: none !important; }
+/* ASN booth map */
+.boothmap { margin: 0 0 var(--s5); }
+.boothmap svg { display: block; width: 100%; height: auto; }
+.boothmap .hall { fill: #F5F5F7; }
+.boothmap .aisle { fill: #E9EBEE; }
+.boothmap .b { fill: #fff; stroke: #E1E4E8; stroke-width: 1.5; }
+.boothmap .b.asn { fill: #FAFAFB; }
+.boothmap .b.o { fill: var(--accent); stroke: var(--accent); }
+.boothmap .al { font: 600 15px var(--sans); fill: #9AA0A6; letter-spacing: .02em; }
+.boothmap .lm { font: 600 14px var(--sans); fill: #8A9096; }
+.boothmap .walk { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 2 9; stroke-linecap: round; opacity: .8; }
+.boothmap .pin circle { fill: var(--accent); }
+.boothmap .pin .pulse { fill: var(--accent); opacity: .18; animation: bm-pulse 2.2s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes bm-pulse { 0% { transform: scale(.5); opacity: .35; } 100% { transform: scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .boothmap .pin .pulse { animation: none; } }
+.boothmap .wall { fill: #CDD1D6; }
+.boothmap .tag { fill: #111418; }
+.boothmap .tt { font: 700 17px var(--sans); fill: #fff; letter-spacing: -.01em; }
+.boothmap figcaption { margin-top: 12px; font-size: 14px; color: var(--ink-3); line-height: 1.55; max-width: 60ch; }
+.boothmap .pin .dot { fill: #fff; }
+@media (max-width: 700px) { .boothmap { overflow-x: auto; -webkit-overflow-scrolling: touch; } .boothmap svg { min-width: 640px; } .boothmap figcaption { position: sticky; left: 0; } }

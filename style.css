@@ -702,3 +702,7 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .zctl button:hover { background: #fff; }
 .zctl svg { width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2; }
 [data-zoom] .asnpin { transform: scale(var(--zs, 1)); transform-origin: 0 0; }
+
+/* Hero render: draw the machine larger without changing the layout box */
+@media (min-width: 961px) { .machine img { transform: scale(1.32); transform-origin: 50% 38%; } }
+@media (max-width: 960px) { .machine img { transform: scale(1.12); transform-origin: 50% 55%; } }

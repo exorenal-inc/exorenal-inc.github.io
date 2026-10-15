@@ -711,3 +711,6 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .form-note.ok { background: #EAF6EE; color: #1E6B3A; }
 .form-note.err { background: #FDEEEE; color: #A12A2A; }
 #contact-form button[disabled] { opacity: .55; cursor: default; }
+
+/* Regulatory line in the footer */
+.ftr-legal { margin: 0; padding-top: var(--s3); font-size: 12px; line-height: 1.55; color: var(--ink-3); max-width: 80ch; }

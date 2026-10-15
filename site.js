@@ -101,21 +101,40 @@
   addEventListener("resize", pick); pick();
 })();
 
-/* News list pager: 9 per page */
+/* News list: category filter + pager (9 per page) */
 (function () {
   var list = document.querySelector("[data-pager]"); if (!list) return;
-  var items = Array.prototype.slice.call(list.children), per = 9, pages = Math.ceil(items.length / per); if (pages < 2) return;
+  var all = Array.prototype.slice.call(list.children), per = 9, cur = "all", items = all;
+  var bar = document.querySelector(".nfilter");
   var nav = document.createElement("nav"); nav.className = "pager"; nav.setAttribute("aria-label", "News pages");
   list.parentNode.insertBefore(nav, list.nextSibling);
   function show(n) {
+    var pages = Math.ceil(items.length / per);
+    all.forEach(function (it) { it.hidden = true; });
     items.forEach(function (it, i) { it.hidden = Math.floor(i / per) !== n; });
+    if (pages < 2) { nav.innerHTML = ""; return; }
     var h = '<button type="button" data-p="' + (n - 1) + '" aria-label="Previous"' + (n === 0 ? " disabled" : "") + '>&lsaquo;</button>';
     for (var i = 0; i < pages; i++) h += '<button type="button" data-p="' + i + '"' + (i === n ? ' aria-current="page"' : "") + '>' + (i + 1) + '</button>';
     h += '<button type="button" data-p="' + (n + 1) + '" aria-label="Next"' + (n === pages - 1 ? " disabled" : "") + '>&rsaquo;</button>';
     nav.innerHTML = h;
   }
+  function filter(c) {
+    cur = c; items = c === "all" ? all : all.filter(function (it) { return it.dataset.cat === c; });
+    if (bar) bar.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.f === c)); });
+    show(0);
+  }
+  if (bar) {
+    bar.querySelectorAll("button").forEach(function (b) {
+      var f = b.dataset.f, n = f === "all" ? all.length : all.filter(function (it) { return it.dataset.cat === f; }).length;
+      b.querySelector("small").textContent = n; if (!n) b.hidden = true;
+    });
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return; filter(b.dataset.f);
+      try { history.replaceState(null, "", b.dataset.f === "all" ? location.pathname : "#" + b.dataset.f); } catch (err) {}
+    });
+  }
   nav.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b || b.disabled) return; show(+b.dataset.p); list.scrollIntoView({ block: "start" }); });
-  show(0);
+  var h0 = location.hash.slice(1); filter(/^(event|press|award|video)$/.test(h0) ? h0 : "all");
 })();
 
 /* Contact: preselect topic from ?topic= */

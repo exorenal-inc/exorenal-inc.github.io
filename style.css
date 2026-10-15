@@ -650,3 +650,11 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .cities .c1 { color: var(--ink); }
 .cities .addr > div { margin-top: var(--s2); }
 @media (max-width: 560px) { .cities { grid-template-columns: 1fr; } .cities .c1 { order: 1; } .cities .addr > div:first-child { order: 2; } .cities .c2 { order: 3; margin-top: var(--s4); } .cities .addr > div:last-child { order: 4; } }
+/* news category filter */
+.nfilter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--s5); }
+.nfilter button { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font: 500 15px/1 var(--sans); color: var(--ink-2); cursor: pointer; transition: background-color .2s, color .2s, border-color .2s; }
+.nfilter button small { font-size: 12px; font-weight: 600; color: var(--ink-3); }
+.nfilter button:hover { color: var(--ink); border-color: rgba(14,17,20,.2); }
+.nfilter button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.nfilter button[aria-pressed="true"] small { color: rgba(255,255,255,.6); }
+.news3 > [hidden] { display: none !important; }

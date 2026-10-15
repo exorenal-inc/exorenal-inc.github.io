@@ -142,3 +142,32 @@
   var m = location.search.match(/[?&]topic=([a-z]+)/); if (!m) return;
   var el = document.getElementById("t-" + m[1]); if (el) el.checked = true;
 })();
+
+/* Zoomable map: buttons, double-click, drag to pan, pinch on touch */
+(function () {
+  document.querySelectorAll("[data-zoom]").forEach(function (box) {
+    var L = box.querySelector(".zl"), s = 1, x = 0, y = 0, MAX = 4;
+    function clamp() { var w = box.clientWidth, h = box.clientHeight; x = Math.min(0, Math.max(w - w * s, x)); y = Math.min(0, Math.max(h - h * s, y)); }
+    function apply(anim) { clamp(); L.style.transition = anim ? "transform .3s ease" : "none"; L.style.transform = "translate(" + x + "px," + y + "px) scale(" + s + ")"; L.style.setProperty("--zs", 1 / s); box.classList.toggle("zoomed", s > 1.01); }
+    function zoomAt(ns, cx, cy, anim) { ns = Math.min(MAX, Math.max(1, ns)); x = cx - (cx - x) * ns / s; y = cy - (cy - y) * ns / s; s = ns; apply(anim); }
+    function center() { return [box.clientWidth / 2, box.clientHeight / 2]; }
+    box.querySelector(".zctl").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return; var c = center();
+      if (b.dataset.z === "in") zoomAt(s * 1.6, c[0], c[1], true);
+      else if (b.dataset.z === "out") zoomAt(s / 1.6, c[0], c[1], true);
+      else { var p = box.querySelector(".asnpin"), px = p.offsetLeft, py = p.offsetTop; s = 3; x = c[0] - px * s; y = c[1] - py * s; apply(true); }
+    });
+    L.addEventListener("dblclick", function (e) { var r = box.getBoundingClientRect(); zoomAt(s > 1.01 ? 1 : 2.5, e.clientX - r.left, e.clientY - r.top, true); });
+    var pts = {}, last = null, pinch = null;
+    box.addEventListener("pointerdown", function (e) { if (e.target.closest(".zctl")) return; pts[e.pointerId] = [e.clientX, e.clientY]; box.setPointerCapture(e.pointerId); last = [e.clientX, e.clientY]; });
+    box.addEventListener("pointermove", function (e) {
+      if (!pts[e.pointerId]) return; pts[e.pointerId] = [e.clientX, e.clientY]; var ids = Object.keys(pts), r = box.getBoundingClientRect();
+      if (ids.length === 2) { var a = pts[ids[0]], b = pts[ids[1]], d = Math.hypot(a[0] - b[0], a[1] - b[1]), cx = (a[0] + b[0]) / 2 - r.left, cy = (a[1] + b[1]) / 2 - r.top;
+        if (pinch) zoomAt(s * d / pinch, cx, cy, false); pinch = d; return; }
+      if (s > 1.01 && last) { x += e.clientX - last[0]; y += e.clientY - last[1]; apply(false); } last = [e.clientX, e.clientY];
+    });
+    function up(e) { delete pts[e.pointerId]; pinch = null; last = null; }
+    box.addEventListener("pointerup", up); box.addEventListener("pointercancel", up);
+    addEventListener("resize", function () { apply(false); });
+  });
+})();

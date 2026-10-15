@@ -690,5 +690,15 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 @media (prefers-reduced-motion: reduce) { .asnpin i::after { animation: none; } }
 .asnpin b { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); white-space: nowrap; background: #111418; color: #fff; font-size: 14px; font-weight: 700; padding: 8px 14px; border-radius: 999px; box-shadow: 0 6px 16px rgba(14,17,20,.25); }
 .asnpin b::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #111418; }
-.asnmap figcaption { max-width: 720px; margin: 14px auto 0; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; font-size: 14px; color: var(--ink-3); line-height: 1.55; }
-.asnmap figcaption > span { flex: 1 1 320px; }
+.asnmap figcaption { max-width: 720px; margin: 14px auto 0; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font-size: 14px; color: var(--ink-3); line-height: 1.55; }
+/* zoomable map */
+[data-zoom] { touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+[data-zoom].zoomed { touch-action: none; cursor: grab; }
+[data-zoom].zoomed:active { cursor: grabbing; }
+[data-zoom] .zl { transform-origin: 0 0; will-change: transform; }
+[data-zoom] img { pointer-events: none; -webkit-user-drag: none; }
+.zctl { position: absolute; right: 14px; bottom: 14px; display: grid; gap: 6px; z-index: 2; }
+.zctl button { width: 40px; height: 40px; border-radius: 12px; border: 0; background: rgba(255,255,255,.92); box-shadow: 0 2px 10px rgba(14,17,20,.14), inset 0 0 0 .5px rgba(14,17,20,.08); font: 600 20px/1 var(--sans); color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+.zctl button:hover { background: #fff; }
+.zctl svg { width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2; }
+[data-zoom] .asnpin { transform: scale(var(--zs, 1)); transform-origin: 0 0; }

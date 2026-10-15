@@ -30,11 +30,11 @@
       <form class="form" id="contact-form" novalidate>
         <div class="field"><span style="font-size:14px;font-weight:600" data-ko="문의 종류">Topic</span>
           <div class="chips" role="radiogroup" aria-label="Topic">
-            <label><input type="radio" name="topic" id="t-demo" checked><span data-ko="시연">Demo</span></label>
-            <label><input type="radio" name="topic" id="t-clinic"><span data-ko="병원·클리닉">Clinic</span></label>
-            <label><input type="radio" name="topic" id="t-partner"><span data-ko="협력">Partnership</span></label>
-            <label><input type="radio" name="topic" id="t-invest"><span data-ko="투자">Investment</span></label>
-            <label><input type="radio" name="topic" id="t-press"><span data-ko="취재">Press</span></label>
+            <label><input type="radio" name="topic" id="t-demo" value="Demo" data-en="Demo" checked><span data-ko="시연">Demo</span></label>
+            <label><input type="radio" name="topic" id="t-clinic" value="Clinic" data-en="Clinic"><span data-ko="병원·클리닉">Clinic</span></label>
+            <label><input type="radio" name="topic" id="t-partner" value="Partnership" data-en="Partnership"><span data-ko="협력">Partnership</span></label>
+            <label><input type="radio" name="topic" id="t-invest" value="Investment" data-en="Investment"><span data-ko="투자">Investment</span></label>
+            <label><input type="radio" name="topic" id="t-press" value="Press" data-en="Press"><span data-ko="취재">Press</span></label>
           </div>
         </div>
         <div class="row2">
@@ -43,6 +43,7 @@
         </div>
         <div class="field"><label for="f-mail" data-ko="이메일">Email</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
         <div class="field"><label for="f-msg" data-ko="문의 내용">Message</label><textarea id="f-msg" name="message" data-ko-ph="무엇을 도와드릴까요?" placeholder="How can we help?"></textarea></div>
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div><button class="pill dark big" type="submit"><span data-ko="보내기">Send</span><svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
         <p class="consent" data-ko="보내 주신 정보는 답변을 위해서만 사용합니다. 자세한 내용은 <a href='privacy.html'>개인정보 처리방침</a>을 확인해 주세요.">By sending, you agree that we use your details to reply, as described in our <a href="privacy.html">Privacy Policy</a>.</p>
         <p class="form-note" id="form-note" hidden></p>

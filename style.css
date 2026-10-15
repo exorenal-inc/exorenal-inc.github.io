@@ -706,3 +706,8 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 /* Hero render: draw the machine larger without changing the layout box */
 @media (min-width: 961px) { .machine img { transform: scale(1.32); transform-origin: 50% 38%; } }
 @media (max-width: 960px) { .machine img { transform: scale(1.12); transform-origin: 50% 55%; } }
+
+/* Contact form result */
+.form-note.ok { background: #EAF6EE; color: #1E6B3A; }
+.form-note.err { background: #FDEEEE; color: #A12A2A; }
+#contact-form button[disabled] { opacity: .55; cursor: default; }

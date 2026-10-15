@@ -39,14 +39,32 @@
     try { if (localStorage.getItem("exo-lang") === "ko") setLang("ko"); } catch (e) {}
   });
 
-  /* contact form: page UI only for now */
+  /* contact form: sends through FormSubmit (no server needed).
+     Test inbox for now; switch FORM_TO to info@exorenal.com when the exorenal.com domain is connected. */
+  var FORM_TO = "naekyun@exorenal.com";
   document.addEventListener("submit", function (e) {
     var f = e.target; if (!f.matches("#contact-form")) return;
     e.preventDefault();
-    var n = document.getElementById("form-note"); n.hidden = false;
-    n.textContent = document.documentElement.lang === "ko"
-      ? "시안 단계라 아직 전송되지 않습니다. 실제 사이트에서는 info@exorenal.com으로 전달됩니다."
-      : "This draft is not connected yet, so nothing was sent. On the live site it goes to info@exorenal.com.";
+    var ko = document.documentElement.lang === "ko", n = document.getElementById("form-note"), btn = f.querySelector("button[type=submit]");
+    function say(msg, ok) { n.hidden = false; n.textContent = msg; n.classList.toggle("ok", !!ok); n.classList.toggle("err", !ok); }
+    var name = f.elements.name.value.trim(), mail = f.elements.email.value.trim(), msg = f.elements.message.value.trim();
+    if (f.elements._honey && f.elements._honey.value) return;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) || !msg) {
+      say(ko ? "이름, 이메일, 문의 내용을 모두 적어 주세요." : "Please fill in your name, email and message.", false); return;
+    }
+    var t = f.querySelector("input[name=topic]:checked"), topic = t ? (t.dataset.en || t.id.replace("t-", "")) : "General";
+    btn.disabled = true; say(ko ? "보내는 중입니다…" : "Sending…", true);
+    fetch("https://formsubmit.co/ajax/" + FORM_TO, {
+      method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ _subject: "[exorenal.com] " + topic + " inquiry from " + name, _template: "table",
+        Topic: topic, Name: name, Organization: f.elements.org.value.trim(), email: mail, Message: msg, Page_language: ko ? "Korean" : "English" })
+    }).then(function (r) { return r.json().then(function (j) { return r.ok && String(j.success) === "true"; }); })
+      .then(function (ok) {
+        if (!ok) throw 0;
+        f.reset(); say(ko ? "보내 주셔서 감사합니다. 확인하고 곧 답장드리겠습니다." : "Thank you. We'll read your message and get back to you soon.", true);
+      })
+      .catch(function () { say(ko ? "전송하지 못했습니다. 잠시 뒤 다시 시도하시거나 " + FORM_TO + "로 메일을 보내 주세요." : "Something went wrong. Please try again, or email us at " + FORM_TO + ".", false); })
+      .then(function () { btn.disabled = false; });
   });
 })();
 

@@ -641,3 +641,8 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .num b { font-size: clamp(50px, 6.5vw, 98px); }
 .nums.four .num b { font-size: clamp(40px, 4.8vw, 70px); }
 :root { --t-hero: clamp(36px, 5.6vw, 76px); }
+/* company top: title on one line, addresses in a row under it */
+.comp.stack { grid-template-columns: 1fr; gap: var(--s5); align-items: start; }
+.comp.stack .title { max-width: none; }
+.comp.stack .addr { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s5); }
+@media (max-width: 560px) { .comp.stack .addr { grid-template-columns: 1fr; gap: var(--s3); } }

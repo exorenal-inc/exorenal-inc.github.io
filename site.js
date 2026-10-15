@@ -58,12 +58,16 @@
       method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({ _subject: "[exorenal.com] " + topic + " inquiry from " + name, _template: "table",
         Topic: topic, Name: name, Organization: f.elements.org.value.trim(), email: mail, Message: msg, Page_language: ko ? "Korean" : "English" })
-    }).then(function (r) { return r.json().then(function (j) { return r.ok && String(j.success) === "true"; }); })
-      .then(function (ok) {
-        if (!ok) throw 0;
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!(r.ok && String(j.success) === "true")) throw new Error(j.message || ("HTTP " + r.status)); }); })
+      .then(function () {
         f.reset(); say(ko ? "보내 주셔서 감사합니다. 확인하고 곧 답장드리겠습니다." : "Thank you. We'll read your message and get back to you soon.", true);
       })
-      .catch(function () { say(ko ? "전송하지 못했습니다. 잠시 뒤 다시 시도하시거나 " + FORM_TO + "로 메일을 보내 주세요." : "Something went wrong. Please try again, or email us at " + FORM_TO + ".", false); })
+      .catch(function (err) {
+        var m = String(err && err.message || "");
+        if (window.console) console.warn("[contact form]", m);
+        if (/activat/i.test(m)) { say(ko ? "폼 활성화가 필요합니다. " + FORM_TO + " 메일함에서 FormSubmit의 'Activate Form' 메일을 열어 버튼을 눌러 주세요." : "This form needs to be activated: open the 'Activate Form' email from FormSubmit at " + FORM_TO + ".", false); return; }
+        say(ko ? "전송하지 못했습니다. 잠시 뒤 다시 시도하시거나 " + FORM_TO + "로 메일을 보내 주세요." : "Something went wrong. Please try again, or email us at " + FORM_TO + ".", false);
+      })
       .then(function () { btn.disabled = false; });
   });
 })();

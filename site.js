@@ -119,13 +119,13 @@
     nav.innerHTML = h;
   }
   function filter(c) {
-    cur = c; items = c === "all" ? all : all.filter(function (it) { return it.dataset.cat === c; });
+    cur = c; items = c === "all" ? all : all.filter(function (it) { return (" " + it.dataset.cat + " ").indexOf(" " + c + " ") > -1; });
     if (bar) bar.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.f === c)); });
     show(0);
   }
   if (bar) {
     bar.querySelectorAll("button").forEach(function (b) {
-      var f = b.dataset.f, n = f === "all" ? all.length : all.filter(function (it) { return it.dataset.cat === f; }).length;
+      var f = b.dataset.f, n = f === "all" ? all.length : all.filter(function (it) { return (" " + it.dataset.cat + " ").indexOf(" " + f + " ") > -1; }).length;
       b.querySelector("small").textContent = n; if (!n) b.hidden = true;
     });
     bar.addEventListener("click", function (e) {

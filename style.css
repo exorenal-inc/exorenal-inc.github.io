@@ -642,7 +642,8 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 .nums.four .num b { font-size: clamp(40px, 4.8vw, 70px); }
 :root { --t-hero: clamp(36px, 5.6vw, 76px); }
 /* company top: each city name with its address under it */
-.cities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s5); row-gap: var(--s3); }
+.cities { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: clamp(14px, 1.5vw, 22px); row-gap: var(--s3); }
+.cities .addr > div { padding-right: var(--s5); }
 .cities .eyebrow { grid-column: 1 / -1; }
 .cities .title, .cities .addr { display: contents; }
 .cities .title > span { font-size: inherit; }

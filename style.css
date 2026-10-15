@@ -181,7 +181,7 @@ a { color: inherit; }
 .logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(40px, 7vw, 104px); margin-top: var(--s5); }
 .logos img { height: 72px; width: auto; filter: brightness(.45); opacity: 1; transition: filter .2s; }
 .logos img:hover { filter: brightness(.2); }
-.logos img[alt='The Launchport'] { height: 80px; } .logos img[alt='Boryung'] { height: 68px; }
+.logos img[alt='The Launchport'] { height: 80px; } .logos img[alt='Boryung'] { height: 28px; opacity: .78; }
 @media (max-width: 560px) { .logos { gap: 28px 40px; } .logos img, .logos img[alt] { height: 48px; } }
 
 /* 7. News: three columns, text only */

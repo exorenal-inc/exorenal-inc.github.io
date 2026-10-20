@@ -714,3 +714,6 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 
 /* Regulatory line in the footer */
 .ftr-legal { margin: 0; padding-top: var(--s3); font-size: 12px; line-height: 1.55; color: var(--ink-3); max-width: 80ch; }
+
+/* product viewer with the new 72-frame render: the machine fills more of each frame, so draw it a bit smaller */
+.spin[data-list] img { transform: scale(.84); transform-origin: 50% 42%; }

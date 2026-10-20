@@ -1,9 +1,10 @@
 /* product page: drag-to-turn viewer, still at the isometric frame */
 (function () {
   document.querySelectorAll(".spin[data-frames]").forEach(function (el) {
-    var n = +el.dataset.frames, base = el.dataset.src, img = el.querySelector("img");
-    var hint = el.parentNode.querySelector(".hint"), frames = null, cur = 0;
-    function src(i) { return base.replace("{n}", String(i + 1).padStart(2, "0")); }
+    var base = el.dataset.src, img = el.querySelector("img"), list = el.dataset.list ? el.dataset.list.split(",") : null;
+    var n = list ? list.length : +el.dataset.frames;
+    var hint = el.parentNode.querySelector(".hint"), frames = null, cur = +(el.dataset.start || 0);
+    function src(i) { return list ? base.replace("{n}", list[i]) : base.replace("{n}", String(i + 1).padStart(2, "0")); }
     function load() { if (frames) return; frames = []; for (var i = 0; i < n; i++) { var im = new Image(); im.decoding = "async"; im.src = src(i); frames.push(im); } }
     function show(i) { load(); cur = ((i % n) + n) % n; img.src = frames[cur].src; }
     function used() { if (hint) hint.classList.add("gone"); }

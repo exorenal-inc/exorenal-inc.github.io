@@ -85,7 +85,7 @@
     tagR = tagFor(mw * dpr * 1.05); tagZ = tagFor(Math.min(maxBox, W * 1.4) * dpr);
     L = { W: W, H: H, mob: mob, mw: mw, mh: mh, top0: top0, y0: ib, s0: s0, plan: plan, fw: fw, fh: fh, fy: fy };
     // numbers sit centred above the machine, the label to the right of each number
-    statsBox.style.left = "50%"; statsBox.style.top = Math.max(mob ? 120 : 140, top0 + .137 * mh - (mob ? 44 : 62)) + "px";
+    statsBox.style.left = "50%"; var shh = stats[0] ? stats[0].offsetHeight : 80; statsBox.style.top = Math.max(mob ? 120 : 140, top0 + .137 * mh - shh / 2 - (mob ? 22 : 36)) + "px";
     // one line that ties the three numbers together, between the menu bar and the numbers
     if (tag) { var sTop = parseFloat(statsBox.style.top), nb = mob ? 76 : 90, th = tag.offsetHeight; tag.style.top = Math.max(nb + 12, sTop - (mob ? 58 : 94) - th) + "px"; }
     if (!cache.length) { load(0); load(NR - 1); load(NR); loadAll(); }
@@ -128,7 +128,7 @@
     var io = seg(p, .02, .1); intro.style.opacity = 1 - io; intro.style.transform = "translateY(" + (-40 * io) + "px)"; intro.style.pointerEvents = io > .5 ? "none" : "";
     // stats while turning
     var win = [[.12, .25], [.25, .38], [.38, .51]];
-    stats.forEach(function (s, i) { var t = seg(p, win[i][0], win[i][1]), a = t < .25 ? t / .25 : t > .75 ? (1 - t) / .25 : 1; if (t <= 0 || t >= 1) a = 0; s.style.opacity = a; var y = (t < .5 ? 1 : -1) * 28 * (1 - a); s.style.transform = "translate(-50%," + (y - s.offsetHeight / 2) + "px)"; });
+    stats.forEach(function (s, i) { var t = seg(p, win[i][0], win[i][1]), a = t < .25 ? t / .25 : t > .75 ? (1 - t) / .25 : 1; if (t <= 0 || t >= 1) a = 0; s.style.opacity = a; var y = (t < .5 ? 1 : -1) * 16 * (1 - a); s.style.transform = "translate(-50%," + (y - s.offsetHeight / 2) + "px)"; });
 
     if (tag) {
       var ta = Math.min(seg(p, .09, .13), 1 - seg(p, .52, .56)); tag.style.opacity = ta; tag.style.transform = "translate(-50%," + (16 * (1 - ta)) + "px)";

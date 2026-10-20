@@ -58,3 +58,10 @@ html[lang=en] .xs-intro h1 { letter-spacing: -.032em; line-height: 1.06; }
 .xst span, .xst i { position: relative; top: var(--xst-dy, 0px); }
 .xst b small { vertical-align: .76em; }
 .xst b small.base { vertical-align: baseline; }
+.xs-swipe { position: absolute; left: 50%; top: 0; z-index: 2; width: 34px; height: 54px; transform: translateX(-50%); opacity: 0; pointer-events: none; display: none; }
+.xs-swipe svg { width: 100%; height: 100%; fill: none; stroke: var(--ink-3); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.xs-swipe .dot { fill: var(--ink-3); stroke: none; animation: xs-swipe 1.6s var(--ease, ease) infinite; }
+.xs-swipe .up { animation: xs-swipe-up 1.6s ease-in-out infinite; }
+@keyframes xs-swipe { 0% { transform: translateY(8px); opacity: 0; } 20% { opacity: 1; } 70% { transform: translateY(-14px); opacity: 1; } 100% { transform: translateY(-14px); opacity: 0; } }
+@keyframes xs-swipe-up { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .xs-swipe .dot, .xs-swipe .up { animation: none; } }

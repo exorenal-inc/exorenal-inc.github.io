@@ -8,7 +8,7 @@
   var QZ = window.XS_QUADS || [], QR = window.XS_QROT || [], BB = window.XS_BBOX || {};
   var pin = sec.querySelector(".xs-pin"), intro = sec.querySelector(".xs-intro"), mach = sec.querySelector(".xs-mach"), img = document.getElementById("xsframe");
   var refl = document.getElementById("xsrefl"), ui = sec.querySelector(".xs-quad.ui"), glass = sec.querySelector(".xs-quad.glass");
-  var stats = Array.prototype.slice.call(sec.querySelectorAll(".xst")), statsBox = sec.querySelector(".xs-stats"); var tag = sec.querySelector(".xs-tag");
+  var stats = Array.prototype.slice.call(sec.querySelectorAll(".xst")), statsBox = sec.querySelector(".xs-stats"); var tag = sec.querySelector(".xs-tag"); var swipe = sec.querySelector(".xs-swipe");
   var flat = sec.querySelector(".xs-flat"), copy = sec.querySelector(".xs-copy"), foot = sec.querySelector(".xs-foot"), bar = sec.querySelector(".xs-foot .bar i");
   var BX = .0267, BY = .0413; // black bezel inside the glass: sides / top-bottom
 
@@ -87,6 +87,8 @@
     // numbers sit centred above the machine, the label to the right of each number
     statsBox.style.left = "50%"; var shh = stats[0] ? stats[0].offsetHeight : 80; statsBox.style.top = Math.max(mob ? 120 : 140, top0 + .137 * mh - shh / 2 - (mob ? 22 : 36)) + "px";
     // one line that ties the three numbers together, between the menu bar and the numbers
+    // phone only: a swipe hint in the empty space between the machine and "Keep scrolling"
+    if (swipe) { var mbot = 0; for (var r1 = 0; r1 < NR; r1++) { var b1 = BB[names[r1]]; if (b1) mbot = Math.max(mbot, b1[3]); } var yB = top0 + (mbot || .93) * mh, yF = foot ? foot.offsetTop : H - 60, sh2 = swipe.offsetHeight || 56; swipe.style.top = ((yB + yF) / 2 - sh2 / 2) + "px"; swipe.style.display = (mob && yF - yB > 96) ? "block" : "none"; }
     if (tag) { var sTop = parseFloat(statsBox.style.top), nb = mob ? 76 : 90, th = tag.offsetHeight; tag.style.top = Math.max(nb + 12, sTop - (mob ? 58 : 94) - th) + "px"; }
     if (!cache.length) { load(0); load(NR - 1); load(NR); loadAll(); }
     shown = -1; update();
@@ -134,6 +136,7 @@
       var ta = Math.min(seg(p, .09, .13), 1 - seg(p, .52, .56)); tag.style.opacity = ta; tag.style.transform = "translate(-50%," + (16 * (1 - ta)) + "px)";
       tag.querySelectorAll("span").forEach(function (w, i) { var t = seg(p, win[i][0], win[i][1]); w.classList.toggle("on", t > .12 && t < .88); });
     }
+    if (swipe) swipe.style.opacity = Math.min(seg(p, .04, .1), 1 - seg(p, .5, .56));
     var zt = seg(p, .56, .8), k, tx, ty, sc;
     var e1 = ease(seg(p, .02, .12)), s1 = lerp(L.s0, 1, e1), y1 = lerp(L.y0, L.top0, e1), x1 = L.W / 2 - L.mw * s1 / 2;
     if (zt <= 0) {

@@ -8,7 +8,7 @@
   var QZ = window.XS_QUADS || [], QR = window.XS_QROT || [], BB = window.XS_BBOX || {};
   var pin = sec.querySelector(".xs-pin"), intro = sec.querySelector(".xs-intro"), mach = sec.querySelector(".xs-mach"), img = document.getElementById("xsframe");
   var refl = document.getElementById("xsrefl"), ui = sec.querySelector(".xs-quad.ui"), glass = sec.querySelector(".xs-quad.glass");
-  var stats = Array.prototype.slice.call(sec.querySelectorAll(".xst")), statsBox = sec.querySelector(".xs-stats");
+  var stats = Array.prototype.slice.call(sec.querySelectorAll(".xst")), statsBox = sec.querySelector(".xs-stats"); var tag = sec.querySelector(".xs-tag");
   var flat = sec.querySelector(".xs-flat"), copy = sec.querySelector(".xs-copy"), foot = sec.querySelector(".xs-foot"), bar = sec.querySelector(".xs-foot .bar i");
   var BX = .0267, BY = .0413; // black bezel inside the glass: sides / top-bottom
 
@@ -49,7 +49,7 @@
     var mw = Math.min(W * (mob ? .98 : .6), (H - (mob ? 280 : 250)) * FW / FH, 1000), mh = mw * FH / FW;
     mach.style.setProperty("--mw", mw + "px");
     var top0 = mob ? H * .46 - mh / 2 : H * .58 - mh / 2;
-    var ib = intro.offsetTop + intro.offsetHeight + (mob ? 14 : 30), s0 = Math.max(.5, Math.min(1, (H - ib - 40) / mh));
+    var ib = intro.offsetTop + intro.offsetHeight + (mob ? 4 : 8), s0 = Math.max(.5, Math.min(1, (H - ib - 40) / mh));
     // flat card (outer glass incl. bezel) at the end
     var qa = qw(QZ[NZ - 1]) * FW / (qh(QZ[NZ - 1]) * FH);
     // copy + card sit together as one block, centred under the menu bar; the card never gets oversized
@@ -84,6 +84,8 @@
     L = { W: W, H: H, mob: mob, mw: mw, mh: mh, top0: top0, y0: ib, s0: s0, plan: plan, fw: fw, fh: fh, fy: fy };
     // numbers sit centred above the machine, the label to the right of each number
     statsBox.style.left = "50%"; statsBox.style.top = Math.max(mob ? 120 : 140, top0 + .137 * mh - (mob ? 44 : 62)) + "px";
+    // one line that ties the three numbers together, between the menu bar and the numbers
+    if (tag) { var sTop = parseFloat(statsBox.style.top), nb = mob ? 76 : 90, th = tag.offsetHeight; tag.style.top = Math.max(nb + 12, sTop - (mob ? 44 : 70) - th) + "px"; }
     if (!cache.length) { load(0); load(NR - 1); load(NR); loadAll(); }
     shown = -1; update();
   }
@@ -126,6 +128,10 @@
     var win = [[.12, .25], [.25, .38], [.38, .51]];
     stats.forEach(function (s, i) { var t = seg(p, win[i][0], win[i][1]), a = t < .25 ? t / .25 : t > .75 ? (1 - t) / .25 : 1; if (t <= 0 || t >= 1) a = 0; s.style.opacity = a; var y = (t < .5 ? 1 : -1) * 28 * (1 - a); s.style.transform = "translate(-50%," + (y - s.offsetHeight / 2) + "px)"; });
 
+    if (tag) {
+      var ta = Math.min(seg(p, .09, .13), 1 - seg(p, .52, .56)); tag.style.opacity = ta; tag.style.transform = "translate(-50%," + (16 * (1 - ta)) + "px)";
+      tag.querySelectorAll("span").forEach(function (w, i) { var t = seg(p, win[i][0], win[i][1]); w.classList.toggle("on", t > .12 && t < .88); });
+    }
     var zt = seg(p, .56, .8), k, tx, ty, sc;
     var e1 = ease(seg(p, .02, .12)), s1 = lerp(L.s0, 1, e1), y1 = lerp(L.y0, L.top0, e1), x1 = L.W / 2 - L.mw * s1 / 2;
     if (zt <= 0) {
@@ -149,7 +155,7 @@
   addEventListener("scroll", function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; update(); }); } }, { passive: true });
   addEventListener("resize", layout); layout();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-  function lang(l) { var s = "img/ui-treat-" + (l === "ko" ? "ko" : "en") + ".webp"; sec.querySelectorAll("img[data-ui]").forEach(function (im) { im.src = s; }); }
+  function lang(l) { var s = "img/ui-treat-" + (l === "ko" ? "ko" : "en") + ".webp"; sec.querySelectorAll("img[data-ui]").forEach(function (im) { im.src = s; }); requestAnimationFrame(function () { layout(); dispatchEvent(new Event("scroll")); }); }
   (window.exoLangHooks = window.exoLangHooks || []).push(lang);
   lang(document.documentElement.lang);
 })();

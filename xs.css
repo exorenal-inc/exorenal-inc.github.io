@@ -2,7 +2,7 @@
 .xs { position: relative; height: 720vh; }
 .xs-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .xs-intro { position: absolute; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 112px); display: grid; justify-items: center; text-align: center; gap: var(--s2); padding-inline: 16px; z-index: 3; will-change: opacity, transform; }
-.xs-intro h1 { font-size: var(--t-hero); line-height: 1.04; font-weight: 700; letter-spacing: -.045em; text-wrap: balance; max-width: 14ch; }
+.xs-intro h1 { font-size: var(--t-hero); line-height: 1; font-weight: 700; letter-spacing: -.045em; text-wrap: balance; max-width: 14ch; }
 .xs-intro h1 span { color: var(--ink-3); }
 .xs-intro p { font-size: 18px; color: var(--ink-2); max-width: 48ch; text-wrap: balance; }
 .xs-intro .row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: var(--s1); }
@@ -48,4 +48,8 @@
 
 /* English headline: a little more air between letters and lines */
 html[lang=en] .xs-intro h1 { letter-spacing: -.032em; line-height: 1.06; }
-.xs-intro .row { margin-top: var(--s2); }
+.xs-tag { position: absolute; left: 50%; top: 0; z-index: 2; margin: 0; opacity: 0; pointer-events: none; white-space: nowrap; text-align: center;
+  font-size: clamp(30px, 3.4vw, 52px); font-weight: 700; letter-spacing: -.04em; line-height: 1.1; color: var(--ink-3); transform: translate(-50%, 16px); will-change: opacity, transform; }
+.xs-tag span { transition: color .35s var(--ease, ease); }
+.xs-tag span.on { color: var(--ink); }
+@media (max-width: 960px) { .xs-tag { font-size: clamp(24px, 7vw, 34px); } }

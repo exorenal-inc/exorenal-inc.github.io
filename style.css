@@ -717,3 +717,9 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 
 /* product viewer with the new 72-frame render: the machine fills more of each frame, so draw it a bit smaller */
 .spin[data-list] img { transform: scale(.84); transform-origin: 50% 42%; }
+
+/* home 'anywhere' strip: phone crops that keep the AI machines out; picture is transparent to the grid */
+.tri picture { display: block; min-width: 0; min-height: 0; overflow: hidden; }
+/* home dialysis page: photo sits closer to the heading */
+.phead.tight, html.snap main > section.phead.tight:first-child { padding-bottom: clamp(20px, 2.4vw, 36px) !important; }
+html.snap main > section.phead.tight + section, .phead.tight + section { padding-top: 0 !important; }

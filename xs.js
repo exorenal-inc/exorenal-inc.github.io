@@ -49,7 +49,7 @@
     var mw = Math.min(W * (mob ? .98 : .6), (H - (mob ? 280 : 250)) * FW / FH, 1000), mh = mw * FH / FW;
     mach.style.setProperty("--mw", mw + "px");
     var top0 = mob ? H * .46 - mh / 2 : H * .58 - mh / 2;
-    var ib = intro.offsetTop + intro.offsetHeight + (mob ? 4 : 8), s0 = Math.max(.5, Math.min(1, (H - ib - 40) / mh));
+    var ib = intro.offsetTop + intro.offsetHeight + (mob ? 14 : 30), s0 = Math.max(.5, Math.min(1, (H - ib - 40) / mh));
     // flat card (outer glass incl. bezel) at the end
     var qa = qw(QZ[NZ - 1]) * FW / (qh(QZ[NZ - 1]) * FH);
     // copy + card sit together as one block, centred under the menu bar; the card never gets oversized

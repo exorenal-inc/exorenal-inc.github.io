@@ -238,7 +238,7 @@ html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
 .spin:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 24px; }
 .hint { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding-inline: 14px 18px; border-radius: 999px; background: var(--tile); font-size: 14px; font-weight: 600; color: var(--ink); transition: opacity .4s; margin-top: var(--s2); user-select: none; -webkit-user-select: none; }
 .viewer .hint { margin-top: calc(var(--sw) * -0.08); position: relative; z-index: 1; }
-.hint .orbit { width: 24px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hint .orbit { width: 30px; height: 30px; fill: var(--ink); stroke: none; }
 .hint .orbit .hd { fill: var(--ink); stroke-width: .8; }
 .hint .orbit .cube { fill: var(--tile); stroke-width: 1.5; }
 .hint.gone { opacity: 0; }

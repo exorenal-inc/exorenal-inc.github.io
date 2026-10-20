@@ -45,6 +45,8 @@
   // ---- layout + the dive schedule
   var L = {}, want = 0, shown = -1;
   function layout() {
+    // label box = its real text width, so number + label centre exactly under the line above
+    stats.forEach(function (s) { var sp = s.querySelector("span"); if (!sp) return; sp.style.width = ""; var r = document.createRange(); r.selectNodeContents(sp); var w = 0; Array.prototype.forEach.call(r.getClientRects(), function (c) { w = Math.max(w, c.width); }); if (w) sp.style.width = Math.ceil(w + 1) + "px"; });
     var W = pin.clientWidth, H = pin.clientHeight, mob = W <= 960, dpr = Math.min(window.devicePixelRatio || 1, 3);
     var mw = Math.min(W * (mob ? .98 : .6), (H - (mob ? 280 : 250)) * FW / FH, 1000), mh = mw * FH / FW;
     mach.style.setProperty("--mw", mw + "px");
@@ -85,7 +87,7 @@
     // numbers sit centred above the machine, the label to the right of each number
     statsBox.style.left = "50%"; statsBox.style.top = Math.max(mob ? 120 : 140, top0 + .137 * mh - (mob ? 44 : 62)) + "px";
     // one line that ties the three numbers together, between the menu bar and the numbers
-    if (tag) { var sTop = parseFloat(statsBox.style.top), nb = mob ? 76 : 90, th = tag.offsetHeight; tag.style.top = Math.max(nb + 12, sTop - (mob ? 44 : 70) - th) + "px"; }
+    if (tag) { var sTop = parseFloat(statsBox.style.top), nb = mob ? 76 : 90, th = tag.offsetHeight; tag.style.top = Math.max(nb + 12, sTop - (mob ? 58 : 94) - th) + "px"; }
     if (!cache.length) { load(0); load(NR - 1); load(NR); loadAll(); }
     shown = -1; update();
   }

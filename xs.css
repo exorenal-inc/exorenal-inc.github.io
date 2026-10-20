@@ -53,3 +53,6 @@ html[lang=en] .xs-intro h1 { letter-spacing: -.032em; line-height: 1.06; }
 .xs-tag span { transition: color .35s var(--ease, ease); }
 .xs-tag span.on { color: var(--ink); }
 @media (max-width: 960px) { .xs-tag { font-size: clamp(24px, 7vw, 34px); } }
+/* number and label share one centre line: the middle of the digits */
+.xst { align-items: center; }
+.xst span, .xst i { position: relative; top: var(--xst-dy, 0px); }

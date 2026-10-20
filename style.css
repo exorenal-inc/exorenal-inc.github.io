@@ -723,3 +723,4 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 /* home dialysis page: photo sits closer to the heading */
 .phead.tight, html.snap main > section.phead.tight:first-child { padding-bottom: clamp(20px, 2.4vw, 36px) !important; }
 html.snap main > section.phead.tight + section, .phead.tight + section { padding-top: 0 !important; }
+@media (max-width: 700px) { .viewer .hint { margin-top: calc(var(--sw) * -0.03); } }

@@ -52,8 +52,11 @@
     var ib = intro.offsetTop + intro.offsetHeight + (mob ? 4 : 8), s0 = Math.max(.5, Math.min(1, (H - ib - 40) / mh));
     // flat card (outer glass incl. bezel) at the end
     var qa = qw(QZ[NZ - 1]) * FW / (qh(QZ[NZ - 1]) * FH);
-    var fw = Math.min(W * (mob ? .94 : .64), (H - (mob ? 300 : 320)) * qa), fh = fw / qa, fy = H - fh - (mob ? 100 : 90);
-    copy.style.top = Math.max(80, fy - (mob ? 160 : 180)) + "px";
+    // copy + card sit together as one block, centred under the menu bar; the card never gets oversized
+    var ch = copy.offsetHeight || (mob ? 130 : 150), gap = mob ? 28 : 40, navH = mob ? 76 : 90;
+    var fw = Math.min(W * (mob ? .92 : .5), (H - navH - ch - gap - (mob ? 60 : 70)) * qa, 860), fh = fw / qa;
+    var top = navH + Math.max(0, (H - navH - (ch + gap + fh)) / 2);
+    copy.style.top = top + "px"; var fy = top + ch + gap;
     // the dive: screen width grows from its resting size to fill the window
     var x1 = W / 2 - mw / 2, q0 = QZ[0], c0 = qc(q0);
     var ax0 = x1 + c0[0] * mw, ay0 = top0 + c0[1] * mh, sw0 = qw(q0) * mw;

@@ -237,9 +237,10 @@ html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
 .spin img { width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
 .spin:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 24px; }
 .hint { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding-inline: 14px 18px; border-radius: 999px; background: var(--tile); font-size: 14px; font-weight: 600; color: var(--ink); transition: opacity .4s; margin-top: var(--s2); user-select: none; -webkit-user-select: none; }
-.viewer .hint { margin-top: calc(var(--sw) * -0.11); position: relative; z-index: 1; }
-.hint .orbit { width: 24px; height: 24px; stroke: var(--ink); stroke-width: 2; }
-.hint .orbit .hd { fill: var(--ink); stroke: none; }
+.viewer .hint { margin-top: calc(var(--sw) * -0.08); position: relative; z-index: 1; }
+.hint .orbit { width: 24px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hint .orbit .hd { fill: var(--ink); stroke-width: .8; }
+.hint .orbit .cube { fill: var(--tile); stroke-width: 1.5; }
 .hint.gone { opacity: 0; }
 
 /* how it works: three steps in a row */
@@ -723,4 +724,4 @@ main[data-look] .teamline div, main[data-look] .addr div { }
 /* home dialysis page: photo sits closer to the heading */
 .phead.tight, html.snap main > section.phead.tight:first-child { padding-bottom: clamp(20px, 2.4vw, 36px) !important; }
 html.snap main > section.phead.tight + section, .phead.tight + section { padding-top: 0 !important; }
-@media (max-width: 700px) { .viewer .hint { margin-top: calc(var(--sw) * -0.03); } }
+@media (max-width: 700px) { .viewer .hint { margin-top: calc(var(--sw) * -0.01); } }

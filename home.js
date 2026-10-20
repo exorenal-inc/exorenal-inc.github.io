@@ -3,7 +3,7 @@
   var N = 36, show = document.getElementById("show"), img = document.getElementById("frame"), bar = document.getElementById("bar"), deg = document.getElementById("deg");
   var cos = Array.prototype.slice.call(document.querySelectorAll(".co"));
   var frames = [], cur = 0, ticking = false;
-  for (var i = 0; i < N; i++) { var im = new Image(); im.decoding = "async"; im.src = "img/spin/xk-" + String(i + 1).padStart(2, "0") + ".webp"; frames.push(im); }
+  for (var i = 0; show && i < N; i++) { var im = new Image(); im.decoding = "async"; im.src = "img/spin/xk-" + String(i + 1).padStart(2, "0") + ".webp"; frames.push(im); }
   function update() {
     ticking = false;
     var r = show.getBoundingClientRect(), span = show.offsetHeight - innerHeight;
@@ -15,8 +15,10 @@
     var active = 0; cos.forEach(function (c, k) { if (p >= +c.dataset.at) active = k; });
     cos.forEach(function (c, k) { c.classList.toggle("on", k === active); });
   }
+  if (show) {
   addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   addEventListener("resize", update); update();
+  }
 
   var gal = document.getElementById("gal"), gp = document.getElementById("g-prev"), gn = document.getElementById("g-next");
   if (gal) {

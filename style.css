@@ -351,7 +351,7 @@ html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
 .tri p { font-size: clamp(16px, 1.4vw, 19px); color: rgba(255,255,255,.82); }
 .tri-tags { position: absolute; top: 20px; left: 0; right: 0; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); pointer-events: none; }
 .tri-tags span { justify-self: start; margin-left: 20px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: rgba(0,0,0,.32); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 6px 10px; border-radius: 999px; }
-@media (max-width: 700px) { .tri { grid-template-columns: 1fr; grid-template-rows: repeat(3, 180px); height: auto; } .tri figcaption { position: relative; grid-row: 4; background: #111; } .tri::after { display: none; } .tri-tags { grid-template-columns: 1fr; grid-template-rows: repeat(3, 180px); top: 12px; bottom: auto; row-gap: 4px; } .tri-tags span { align-self: start; } }
+@media (max-width: 700px) { .tri { grid-template-columns: 1fr; grid-template-rows: repeat(3, 220px); height: auto; } .tri figcaption { position: relative; grid-row: 4; background: #111; } .tri::after { display: none; } .tri-tags { grid-template-columns: 1fr; grid-template-rows: repeat(3, 220px); top: 12px; bottom: auto; row-gap: 4px; } .tri-tags span { align-self: start; } }
 
 /* Size comparison bars (product page) */
 .bars { margin-top: var(--s5); display: grid; gap: 14px; }

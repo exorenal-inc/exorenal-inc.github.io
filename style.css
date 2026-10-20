@@ -596,7 +596,7 @@ main[data-look] .band .tl li { border-top-color: #D9DCE0; }
 main[data-look] .teamline div, main[data-look] .addr div { }
 /* company: mission line under the map */
 .mission { display: grid; gap: var(--s2); justify-items: center; text-align: center; margin-top: clamp(8px, 2vw, 24px); padding-bottom: var(--s4, 48px); }
-.mission .sub { max-width: 34em; margin-inline: auto; }
+.mission .sub { max-width: 34em; margin-inline: auto; text-wrap: balance; }
 
 /* ===== Liquid-glass nav (revert: delete this block) ===== */
 .nav {

@@ -750,3 +750,10 @@ html.snap main > section.phead.tight + section, .phead.tight + section { padding
 .inv .num b { font-size: clamp(44px, 4.4vw, 64px); }
 html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !important; }
 @media (max-width: 640px) { .phead.ihead, html.snap main > section.phead.ihead:first-child { padding-bottom: 56px !important; border-radius: 0 0 28px 28px; } }
+/* company: centered cities on the same soft panel */
+.phead.chead .cities { justify-content: center; text-align: center; }
+.phead.chead .cities .addr > div { padding-right: 0; justify-items: center; }
+.phead.chead .world { width: 100%; }
+.mission .sub, .phead .sub { word-break: keep-all; }
+.cmap { padding-top: clamp(24px, 4vw, 56px); }
+.cmap .world { margin-top: 0; }

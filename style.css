@@ -739,3 +739,14 @@ html.snap main > section.phead.tight + section, .phead.tight + section { padding
 .ctr .cols3 div { justify-items: center; text-align: center; }
 .ctr .datachips { text-align: center; }
 .ctr .datachips p { justify-content: center; }
+
+/* investors: centered page head on a soft panel, calmer section titles */
+.phead .title { word-break: keep-all; }
+.phead.ihead { text-align: center; display: grid; justify-items: center; background: var(--tile); border-radius: 0 0 40px 40px; max-width: none; padding-bottom: 88px; }
+.phead.ihead .title { margin-inline: auto; }
+.phead.ihead .sub { margin: 16px auto 0; text-align: center; }
+.inv > section.sec .title { font-size: clamp(28px, 3.2vw, 44px); }
+.inv > section.sec .sub { font-size: 17px; }
+.inv .num b { font-size: clamp(44px, 4.4vw, 64px); }
+html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !important; }
+@media (max-width: 640px) { .phead.ihead, html.snap main > section.phead.ihead:first-child { padding-bottom: 56px !important; border-radius: 0 0 28px 28px; } }

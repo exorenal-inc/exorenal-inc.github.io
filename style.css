@@ -757,3 +757,4 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .mission .sub, .phead .sub { word-break: keep-all; }
 .cmap { padding-top: clamp(24px, 4vw, 56px); }
 .cmap .world { margin-top: 0; }
+.title, main p { word-break: keep-all; }

@@ -294,7 +294,7 @@ html:lang(ko) body { word-break: keep-all; overflow-wrap: anywhere; }
 .note { margin-top: var(--s4); font-size: 13px; color: var(--ink-3); }
 
 /* timeline */
-.tl { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); row-gap: var(--s5); }
+.tl { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); row-gap: var(--s5); }
 .tl li { position: relative; padding: var(--s4) var(--s3) 0 0; display: grid; gap: 6px; align-content: start; border-top: 1px solid var(--line); }
 .tl li::before { content: ""; position: absolute; top: -6px; left: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); }
 .tl li.now::before { background: var(--accent); box-shadow: 0 0 0 5px rgba(var(--accent-rgb),.18); }

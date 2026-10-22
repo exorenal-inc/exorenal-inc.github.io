@@ -758,3 +758,15 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .cmap { padding-top: clamp(24px, 4vw, 56px); }
 .cmap .world { margin-top: 0; }
 .title, main p { word-break: keep-all; }
+/* research papers under the company timeline */
+.papers { margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid #D9DCE0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+.papers h3 { font-size: clamp(22px, 2vw, 28px); font-weight: 700; letter-spacing: -.03em; }
+.papers ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.papers li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #D9DCE0; }
+.papers li:first-child { padding-top: 0; }
+.papers li i { font-style: normal; font-weight: 600; font-size: 14px; color: var(--ink-3); padding-top: 2px; }
+.papers li a { color: var(--ink); text-decoration: none; display: grid; gap: 2px; }
+.papers li a b { font-size: 16px; font-weight: 500; line-height: 1.45; }
+.papers li a:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.papers li em { font-style: normal; font-size: 13px; color: var(--ink-2); }
+@media (max-width: 860px) { .papers { grid-template-columns: 1fr; gap: var(--s3); } .papers li { grid-template-columns: 52px 1fr; } }

@@ -3,7 +3,7 @@
   /* always open a page at the top (unless a #section is asked for) */
   try { history.scrollRestoration = "manual"; } catch (e) {}
   if (!location.hash) window.scrollTo(0, 0);
-  addEventListener("pageshow", function (e) { if (!location.hash) window.scrollTo(0, 0); document.documentElement.classList.remove("pg-leave"); });
+  addEventListener("pageshow", function (e) { if (e.persisted && !location.hash) window.scrollTo(0, 0); document.documentElement.classList.remove("pg-leave"); });
 
   /* page change effect */
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, root = document.documentElement;
@@ -156,7 +156,7 @@
     });
   }
   nav.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b || b.disabled) return; show(+b.dataset.p); list.scrollIntoView({ block: "start" }); });
-  var h0 = location.hash.slice(1); filter(/^(event|press|award|video)$/.test(h0) ? h0 : "all");
+  var h0 = location.hash.slice(1); filter(/^(event|press|award|video|paper)$/.test(h0) ? h0 : "all");
 })();
 
 /* Contact: preselect topic from ?topic= */

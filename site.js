@@ -301,4 +301,9 @@
     liquidChips(ch, function () { return [].slice.call(ch ? ch.querySelectorAll("label > span") : []); }, function (s) { var i = s.previousElementSibling; return !!(i && i.checked); });
   }, 0);
 
+
+  /* papers: show all / show less */
+  document.querySelectorAll(".papers-more").forEach(function (b) {
+    b.addEventListener("click", function () { var box = b.closest(".papers"), open = !box.classList.contains("open"); box.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open)); });
+  });
 })();

@@ -820,11 +820,23 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .nfilter.lq-box button[aria-pressed="true"], .chips.lq-box input:checked + span { transition: color .25s .18s, border-color .25s; }
 @media (prefers-reduced-motion: reduce) { .lq-box > .lq, .lq-box > .lq.go-r, .lq-box > .lq.go-l { transition: opacity .2s; } }
 
-/* press shows only where the finger/mouse lands: a soft dent that spreads from that point */
-.tap { position: relative; overflow: hidden; isolation: isolate; -webkit-tap-highlight-color: transparent; }
-.tap::after { content: ""; position: absolute; left: var(--px, 50%); top: var(--py, 50%); width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; pointer-events: none;
-  background: radial-gradient(circle, rgba(14,17,20,.16) 0, rgba(14,17,20,.08) 38%, rgba(14,17,20,0) 70%);
-  transform: scale(.2); opacity: 0; transition: transform .55s cubic-bezier(.2,.8,.3,1), opacity .45s ease; }
-.tap.pressing::after { transform: scale(1); opacity: 1; transition: transform .22s cubic-bezier(.2,.9,.3,1), opacity .08s; }
-.pill.dark.tap::after, .nfilter button[aria-pressed="true"].tap::after, .chips input:checked + span.tap::after, .pager button[aria-current="page"].tap::after { background: radial-gradient(circle, rgba(255,255,255,.28) 0, rgba(255,255,255,.12) 38%, rgba(255,255,255,0) 70%); }
-@media (prefers-reduced-motion: reduce) { .tap::after { transition: opacity .2s; transform: none; } }
+
+/* jelly press: only the shape gives way where it is touched (the pressed spot sinks, the far side lifts); the label stays flat */
+.tap { -webkit-tap-highlight-color: transparent; }
+.pill.tap { position: relative; isolation: isolate; background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
+.pill.tap::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; z-index: -1; pointer-events: none;
+  background: var(--pb); border: 1px solid var(--pbd); box-shadow: var(--psh, none);
+  transform: perspective(var(--pp, 220px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--ps, 1));
+  transition: transform .7s cubic-bezier(.25,1.9,.4,1), background-color .2s, border-color .2s; }
+.pill.tap.pressing::before { transition: transform .14s cubic-bezier(.2,.9,.3,1), background-color .2s, border-color .2s; }
+.pill.dark.tap { --pb: var(--ink); --pbd: var(--ink); }
+.pill.dark.tap:hover { --pb: #2A2F35; --pbd: #2A2F35; }
+.pill.line.tap { --pb: #fff; --pbd: var(--line); }
+.pill.line.tap:hover { --pbd: #CDD1D5; }
+.nav-r .pill.dark.tap { --psh: inset 0 1px 0 rgba(255,255,255,.22), 0 4px 12px rgba(14,17,20,.18); }
+.nav-links .blob, .lang .blob, .lq-box > .lq { --rx: 0deg; --ry: 0deg; --ps: 1; }
+.nav-links .blob.jelly, .lang .blob.jelly, .lq-box > .lq.jelly { transform: perspective(var(--pp, 220px)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--ps)) !important;
+  transition: left .7s cubic-bezier(.3,1.3,.5,1), right .7s cubic-bezier(.3,1.3,.5,1), top .6s, bottom .6s, opacity .3s, transform .14s cubic-bezier(.2,.9,.3,1) !important; }
+.nav-links .blob.jelly-out, .lang .blob.jelly-out, .lq-box > .lq.jelly-out { transform: perspective(var(--pp, 220px)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--ps));
+  transition: left .7s cubic-bezier(.3,1.3,.5,1), right .7s cubic-bezier(.3,1.3,.5,1), top .6s, bottom .6s, opacity .3s, transform .7s cubic-bezier(.25,1.9,.4,1) !important; }
+@media (prefers-reduced-motion: reduce) { .pill.tap::before { transition: none; transform: none; } }

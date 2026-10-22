@@ -286,15 +286,33 @@
     liquidChips(ch, function () { return [].slice.call(ch ? ch.querySelectorAll("label > span") : []); }, function (s) { var i = s.previousElementSibling; return !!(i && i.checked); });
   }, 0);
 
-  /* press mark at the exact point touched */
+  /* jelly press: the touched spot sinks, the opposite side lifts */
   var TAP = ".pill, .nav-links a, .lang button, .nfilter button, .chips span, .pager button";
-  document.querySelectorAll(TAP).forEach(function (el) { el.classList.add("tap"); });
+  var reduceM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".pill").forEach(function (el) { el.classList.add("tap"); });
   document.addEventListener("pointerdown", function (e) {
+    if (reduceM) return;
     var el = e.target.closest(TAP); if (!el) { var lb = e.target.closest(".chips label"); el = lb && lb.querySelector("span"); } if (!el) return;
-    el.classList.add("tap"); var r = el.getBoundingClientRect();
-    el.style.setProperty("--px", (e.clientX - r.left) + "px"); el.style.setProperty("--py", (e.clientY - r.top) + "px");
-    el.classList.remove("pressing"); el.offsetWidth; el.classList.add("pressing");
-    function up() { el.classList.remove("pressing"); removeEventListener("pointerup", up); removeEventListener("pointercancel", up); }
+    var shape = el, on = true;
+    if (!el.classList.contains("pill")) {   // menu, language, chips: the flowing pill is the shape
+      var box = el.closest(".nav-links, .lang, .lq-box"); shape = box && box.querySelector(":scope > .blob, :scope > .lq");
+      if (!shape) return;
+      var sr = shape.getBoundingClientRect(), er = el.getBoundingClientRect();
+      on = Math.abs(sr.left - er.left) < 6 && Math.abs(sr.right - er.right) < 6;   // only when the pill is already under the finger
+      if (!on) return;
+    }
+    var r = shape.getBoundingClientRect(), w = r.width, h = r.height;
+    var dx = Math.max(-1, Math.min(1, (e.clientX - r.left - w / 2) / (w / 2))), dy = Math.max(-1, Math.min(1, (e.clientY - r.top - h / 2) / (h / 2)));
+    var ay = 9 * Math.min(1, 90 / w) + 5, ax = 16;   // long pills tilt less along their length
+    shape.style.setProperty("--ry", (dx * ay).toFixed(2) + "deg"); shape.style.setProperty("--rx", (-dy * ax).toFixed(2) + "deg");
+    shape.style.setProperty("--pp", Math.max(160, w * 1.6).toFixed(0) + "px"); shape.style.setProperty("--ps", ".965");
+    shape.classList.remove("jelly-out"); shape.classList.add(shape === el ? "pressing" : "jelly"); if (shape === el) el.classList.add("pressing");
+    function up() {
+      shape.style.setProperty("--rx", "0deg"); shape.style.setProperty("--ry", "0deg"); shape.style.setProperty("--ps", "1");
+      el.classList.remove("pressing"); shape.classList.remove("pressing");
+      if (shape !== el) { shape.classList.remove("jelly"); shape.classList.add("jelly-out"); setTimeout(function () { shape.classList.remove("jelly-out"); }, 750); }
+      removeEventListener("pointerup", up); removeEventListener("pointercancel", up);
+    }
     addEventListener("pointerup", up); addEventListener("pointercancel", up);
   });
 })();

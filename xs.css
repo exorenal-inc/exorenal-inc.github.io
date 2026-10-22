@@ -67,3 +67,6 @@ html[lang=en] .xs-intro h1 { letter-spacing: -.032em; line-height: 1.06; }
 @keyframes xs-swipe-up { 0%, 50%, 100% { opacity: .3; } 25% { opacity: 1; } }
 @keyframes xs-swipe-dn { 0%, 50%, 100% { opacity: .3; } 75% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .xs-swipe .dot, .xs-swipe .up, .xs-swipe .dn { animation: none; } }
+
+/* story layers are pictures/text only: never catch clicks meant for the hero buttons */
+.xs-copy, .xs-flat, .xs-foot { pointer-events: none; }

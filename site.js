@@ -14,9 +14,48 @@
       var a = e.target.closest("a[href]"); if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === "_blank") return;
       var href = a.getAttribute("href"); if (!/\.html(#.*)?$/.test(href) || href.indexOf("#") > -1 && href.split("#")[0] === location.pathname.split("/").pop()) return;
       e.preventDefault(); root.classList.add("pg-leave");
-      setTimeout(function () { location.href = href; }, 200);
+      setTimeout(function () { location.href = href; }, 260);
     });
   }
+
+
+  /* nav: liquid pill (after the saved language is applied) */
+  setTimeout(function () {
+    var box = document.querySelector(".nav-links"); if (!box) return;
+    var links = [].slice.call(box.querySelectorAll("a")), cur = box.querySelector('a[aria-current="page"]');
+    var blob = document.createElement("span"); blob.className = "blob"; blob.setAttribute("aria-hidden", "true");
+    box.appendChild(blob); box.classList.add("has-blob");
+    var pos = null, tm;
+    function edges(a) { var b = box.getBoundingClientRect(), r = a.getBoundingClientRect(); return { l: r.left - b.left, r: b.right - r.right }; }
+    function place(e, animate) {
+      if (!animate) blob.style.transition = "none";
+      if (pos && animate) { blob.classList.toggle("go-r", e.l > pos.l); blob.classList.toggle("go-l", e.l < pos.l);
+        if (e.l !== pos.l) { blob.classList.add("squish"); clearTimeout(tm); tm = setTimeout(function () { blob.classList.remove("squish"); }, 450); } }
+      blob.style.setProperty("--l", e.l + "px"); blob.style.setProperty("--r", e.r + "px"); pos = e;
+      if (!animate) { blob.offsetWidth; blob.style.transition = ""; }
+    }
+    function moveTo(a, hover) {
+      if (!a) { blob.classList.remove("on", "hover"); return; }
+      var e = edges(a); if (!blob.classList.contains("on")) { place(e, false); blob.classList.add("on"); } else place(e, true);
+      blob.classList.toggle("hover", !!hover && a !== cur);
+    }
+    // arrive: flow from the item clicked on the previous page
+    var from = null; try { from = sessionStorage.getItem("navFrom"); sessionStorage.removeItem("navFrom"); } catch (e) {}
+    var prev = from && links.filter(function (a) { return a.getAttribute("href") === from; })[0];
+    if (cur && prev && prev !== cur && !reduce) { place(edges(prev), false); blob.classList.add("on"); requestAnimationFrame(function () { requestAnimationFrame(function () { moveTo(cur); }); }); }
+    else moveTo(cur);
+    links.forEach(function (a) {
+      a.addEventListener("mouseenter", function () { moveTo(a, true); });
+      a.addEventListener("click", function () { try { if (cur) sessionStorage.setItem("navFrom", cur.getAttribute("href")); } catch (e) {} moveTo(a); blob.classList.remove("hover"); });
+    });
+    box.addEventListener("mouseleave", function () { moveTo(cur); });
+    box.addEventListener("pointerdown", function (e) { var a = e.target.closest("a"); if (!a) return; moveTo(a, a !== cur); blob.classList.add("press"); });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { box.addEventListener(t, function () { blob.classList.remove("press"); }); });
+    addEventListener("resize", function () { if (cur) place(edges(cur), false); });
+    // language switch changes the menu widths: let the pill follow
+    if (window.MutationObserver) new MutationObserver(function () { var h = box.querySelector("a:hover"); if (cur || h) place(edges(h || cur), true); }).observe(box, { childList: true, subtree: true, characterData: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (cur && !box.matches(":hover")) place(edges(cur), false); });
+  }, 0);
 
   var bg = document.getElementById("burger"), sh = document.getElementById("sheet");
   if (bg && sh) {
@@ -192,4 +231,29 @@
     box.addEventListener("pointerup", up); box.addEventListener("pointercancel", up);
     addEventListener("resize", function () { apply(false); });
   });
+
+  /* language toggle: liquid pill */
+  setTimeout(function () {
+    var box = document.querySelector(".nav .lang"); if (!box) return;
+    var btns = [].slice.call(box.querySelectorAll("button"));
+    var blob = document.createElement("span"); blob.className = "blob"; blob.setAttribute("aria-hidden", "true");
+    box.appendChild(blob); box.classList.add("has-blob");
+    var pos = null, tm;
+    function edges(a) { var b = box.getBoundingClientRect(), r = a.getBoundingClientRect(); return { l: r.left - b.left, r: b.right - r.right }; }
+    function sync(animate) {
+      var a = box.querySelector('button[aria-pressed="true"]'); if (!a) return;
+      var e = edges(a);
+      if (!animate || !pos) { blob.style.transition = "none"; }
+      else { blob.classList.toggle("go-r", e.l > pos.l); blob.classList.toggle("go-l", e.l < pos.l);
+        if (e.l !== pos.l) { blob.classList.add("squish"); clearTimeout(tm); tm = setTimeout(function () { blob.classList.remove("squish"); }, 380); } }
+      blob.style.setProperty("--l", e.l + "px"); blob.style.setProperty("--r", e.r + "px"); pos = e; blob.classList.add("on");
+      if (!animate) { blob.offsetWidth; blob.style.transition = ""; }
+    }
+    sync(false);
+    if (window.MutationObserver) new MutationObserver(function () { sync(true); }).observe(box, { attributes: true, subtree: true, attributeFilter: ["aria-pressed"] });
+    box.addEventListener("pointerdown", function () { blob.classList.add("press"); });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { box.addEventListener(t, function () { blob.classList.remove("press"); }); });
+    addEventListener("resize", function () { sync(false); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { sync(false); });
+  }, 0);
 })();

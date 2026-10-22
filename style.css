@@ -770,3 +770,34 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .papers li a:hover b { text-decoration: underline; text-underline-offset: 3px; }
 .papers li em { font-style: normal; font-size: 13px; color: var(--ink-2); }
 @media (max-width: 860px) { .papers { grid-template-columns: 1fr; gap: var(--s3); } .papers li { grid-template-columns: 52px 1fr; } }
+
+/* nav: one liquid pill that flows between menu items */
+.nav-links.has-blob { position: relative; }
+.nav-links.has-blob a { position: relative; z-index: 1; background: none !important; box-shadow: none !important; }
+.nav-links .blob { position: absolute; top: 0; bottom: 0; left: var(--l, 0); right: var(--r, 100%); border-radius: 999px; z-index: 0; pointer-events: none;
+  background: rgba(255,255,255,.85); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 .5px rgba(14,17,20,.08), 0 2px 8px rgba(14,17,20,.08);
+  opacity: 0; transition: left .7s cubic-bezier(.3,1.3,.5,1), right .7s cubic-bezier(.3,1.3,.5,1), opacity .3s, transform .5s; }
+.nav-links .blob.on { opacity: 1; }
+.nav-links .blob.hover { background: rgba(255,255,255,.55); }
+/* moving right: front (right) edge leads, back edge follows = stretched drop */
+.nav-links .blob.go-r { transition: right .48s cubic-bezier(.2,.9,.3,1.12), left .75s cubic-bezier(.4,1.2,.5,1) .12s, opacity .3s, transform .5s; }
+.nav-links .blob.go-l { transition: left .48s cubic-bezier(.2,.9,.3,1.12), right .75s cubic-bezier(.4,1.2,.5,1) .12s, opacity .3s, transform .5s; }
+.nav-links .blob.squish { transform: scaleY(.86); }
+@media (prefers-reduced-motion: reduce) { .nav-links .blob, .nav-links .blob.go-r, .nav-links .blob.go-l { transition: opacity .2s; } }
+
+/* language toggle: same liquid pill */
+.lang.has-blob { position: relative; }
+.lang.has-blob button { position: relative; z-index: 1; background: none !important; box-shadow: none !important; }
+.lang .blob { position: absolute; top: 3px; bottom: 3px; left: var(--l, 0); right: var(--r, 100%); border-radius: 999px; z-index: 0; pointer-events: none;
+  background: rgba(255,255,255,.95); box-shadow: inset 0 1px 0 #fff, 0 1px 4px rgba(14,17,20,.12);
+  opacity: 0; transition: left .6s cubic-bezier(.3,1.3,.5,1), right .6s cubic-bezier(.3,1.3,.5,1), opacity .3s, transform .35s; }
+.lang .blob.on { opacity: 1; }
+.lang .blob.go-r { transition: right .42s cubic-bezier(.2,.9,.3,1.12), left .65s cubic-bezier(.4,1.2,.5,1) .1s, opacity .3s, transform .35s; }
+.lang .blob.go-l { transition: left .42s cubic-bezier(.2,.9,.3,1.12), right .65s cubic-bezier(.4,1.2,.5,1) .1s, opacity .3s, transform .35s; }
+.lang .blob.squish { transform: scaleY(.86); }
+
+/* pressed feel: pills sink a little while held */
+.nav-links .blob.press, .lang .blob.press { transform: scale(1.08, .9) !important; transition-duration: .7s, .7s, .3s, .14s; }
+.pill, .nfilter button, .pager button, .burger { transition: background-color .2s, border-color .2s, color .2s, transform .45s cubic-bezier(.3,1.8,.4,1); }
+.pill:active, .nfilter button:active, .pager button:active, .burger:active { transform: scale(1.06, .93); transition-duration: .2s, .2s, .2s, .12s; }
+@media (prefers-reduced-motion: reduce) { .lang .blob, .lang .blob.go-r, .lang .blob.go-l { transition: opacity .2s; } .pill:active, .nfilter button:active, .pager button:active, .burger:active { transform: none; } }

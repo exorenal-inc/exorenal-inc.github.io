@@ -49,8 +49,7 @@
       a.addEventListener("click", function () { try { if (cur) sessionStorage.setItem("navFrom", cur.getAttribute("href")); } catch (e) {} moveTo(a); blob.classList.remove("hover"); });
     });
     box.addEventListener("mouseleave", function () { moveTo(cur); });
-    box.addEventListener("pointerdown", function (e) { var a = e.target.closest("a"); if (!a) return; moveTo(a, a !== cur); blob.classList.add("press"); });
-    ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { box.addEventListener(t, function () { blob.classList.remove("press"); }); });
+
     addEventListener("resize", function () { if (cur) place(edges(cur), false); });
     // language switch changes the menu widths: let the pill follow
     if (window.MutationObserver) new MutationObserver(function () { var h = box.querySelector("a:hover"); if (cur || h) place(edges(h || cur), true); }).observe(box, { childList: true, subtree: true, characterData: true });
@@ -251,9 +250,51 @@
     }
     sync(false);
     if (window.MutationObserver) new MutationObserver(function () { sync(true); }).observe(box, { attributes: true, subtree: true, attributeFilter: ["aria-pressed"] });
-    box.addEventListener("pointerdown", function () { blob.classList.add("press"); });
-    ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { box.addEventListener(t, function () { blob.classList.remove("press"); }); });
+
     addEventListener("resize", function () { sync(false); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { sync(false); });
   }, 0);
+
+  /* chips: dark pill flows between choices (news filter, contact topics) */
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function liquidChips(box, items, isOn) {
+    if (!box) return;
+    var blob = document.createElement("span"); blob.className = "lq"; blob.setAttribute("aria-hidden", "true");
+    box.insertBefore(blob, box.firstChild); box.classList.add("lq-box");
+    var pos = null, tm;
+    function edges(a) { var b = box.getBoundingClientRect(), r = a.getBoundingClientRect(); return { l: r.left - b.left, r: b.right - r.right, t: r.top - b.top, b: b.bottom - r.bottom }; }
+    function sync(animate) {
+      var a = items().filter(isOn)[0]; if (!a || !a.offsetParent) { blob.classList.remove("on"); return; }
+      var e = edges(a);
+      if (!animate || !pos || reduce) blob.style.transition = "none";
+      else { blob.classList.toggle("go-r", e.l > pos.l); blob.classList.toggle("go-l", e.l < pos.l);
+        if (e.l !== pos.l || e.t !== pos.t) { blob.classList.add("squish"); clearTimeout(tm); tm = setTimeout(function () { blob.classList.remove("squish"); }, 380); } }
+      ["l", "r", "t", "b"].forEach(function (k) { blob.style.setProperty("--" + k, e[k] + "px"); }); pos = e; blob.classList.add("on");
+      if (!animate || reduce) { blob.offsetWidth; blob.style.transition = ""; }
+    }
+    sync(false);
+    if (window.MutationObserver) new MutationObserver(function () { sync(true); }).observe(box, { attributes: true, subtree: true, attributeFilter: ["aria-pressed", "hidden"], childList: true, characterData: true });
+    box.addEventListener("change", function () { sync(true); });
+
+    addEventListener("resize", function () { sync(false); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { sync(false); });
+  }
+  setTimeout(function () {
+    var nf = document.querySelector(".nfilter");
+    liquidChips(nf, function () { return [].slice.call(nf ? nf.querySelectorAll("button") : []); }, function (b) { return b.getAttribute("aria-pressed") === "true"; });
+    var ch = document.querySelector(".chips");
+    liquidChips(ch, function () { return [].slice.call(ch ? ch.querySelectorAll("label > span") : []); }, function (s) { var i = s.previousElementSibling; return !!(i && i.checked); });
+  }, 0);
+
+  /* press mark at the exact point touched */
+  var TAP = ".pill, .nav-links a, .lang button, .nfilter button, .chips span, .pager button";
+  document.querySelectorAll(TAP).forEach(function (el) { el.classList.add("tap"); });
+  document.addEventListener("pointerdown", function (e) {
+    var el = e.target.closest(TAP); if (!el) { var lb = e.target.closest(".chips label"); el = lb && lb.querySelector("span"); } if (!el) return;
+    el.classList.add("tap"); var r = el.getBoundingClientRect();
+    el.style.setProperty("--px", (e.clientX - r.left) + "px"); el.style.setProperty("--py", (e.clientY - r.top) + "px");
+    el.classList.remove("pressing"); el.offsetWidth; el.classList.add("pressing");
+    function up() { el.classList.remove("pressing"); removeEventListener("pointerup", up); removeEventListener("pointercancel", up); }
+    addEventListener("pointerup", up); addEventListener("pointercancel", up);
+  });
 })();

@@ -155,7 +155,7 @@
       try { history.replaceState(null, "", b.dataset.f === "all" ? location.pathname : "#" + b.dataset.f); } catch (err) {}
     });
   }
-  nav.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b || b.disabled) return; show(+b.dataset.p); list.scrollIntoView({ block: "start" }); });
+  nav.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b || b.disabled) return; show(+b.dataset.p); window.scrollTo({ top: 0, behavior: "smooth" }); });
   var h0 = location.hash.slice(1); filter(/^(event|press|award|video|paper)$/.test(h0) ? h0 : "all");
 })();
 

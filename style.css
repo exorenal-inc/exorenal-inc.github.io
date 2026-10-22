@@ -804,20 +804,22 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .burger:active { transform: scale(1.08, .92); transition-duration: .12s; }
 @media (prefers-reduced-motion: reduce) { .lang .blob, .lang .blob.go-r, .lang .blob.go-l { transition: opacity .2s; } .burger:active { transform: none; } }
 
-/* filter chips (news) and topic chips (contact): the dark pill flows between choices */
-.lq-box { position: relative; }
-.lq-box > .lq { position: absolute; left: var(--l, 0); right: var(--r, 100%); top: var(--t, 0); bottom: var(--b, 100%); border-radius: 999px; background: var(--ink); z-index: 0; pointer-events: none; opacity: 0;
+/* filter chips (news) and topic chips (contact): one pill flows between choices.
+   The pill sits on top and inverts what is under it (white page → black, dark text → white),
+   so chips it passes over never show their outlines through it. */
+.lq-box { position: relative; isolation: isolate; background: #fff; }
+.lq-box > .lq { position: absolute; display: block; height: auto; padding: 0; border: 0; left: var(--l, 0); right: var(--r, 100%); top: var(--t, 0); bottom: var(--b, 100%); border-radius: 999px;
+  background: #fff; mix-blend-mode: difference; z-index: 2; pointer-events: none; opacity: 0;
   transition: left .62s cubic-bezier(.3,1.25,.5,1), right .62s cubic-bezier(.3,1.25,.5,1), top .62s cubic-bezier(.3,1.25,.5,1), bottom .62s cubic-bezier(.3,1.25,.5,1), opacity .3s, transform .45s cubic-bezier(.3,1.8,.4,1); }
 .lq-box > .lq.on { opacity: 1; }
 .lq-box > .lq.go-r { transition: right .42s cubic-bezier(.2,.9,.3,1.1), left .68s cubic-bezier(.4,1.2,.5,1) .1s, top .55s cubic-bezier(.3,1.2,.5,1), bottom .55s cubic-bezier(.3,1.2,.5,1), opacity .3s, transform .45s cubic-bezier(.3,1.8,.4,1); }
 .lq-box > .lq.go-l { transition: left .42s cubic-bezier(.2,.9,.3,1.1), right .68s cubic-bezier(.4,1.2,.5,1) .1s, top .55s cubic-bezier(.3,1.2,.5,1), bottom .55s cubic-bezier(.3,1.2,.5,1), opacity .3s, transform .45s cubic-bezier(.3,1.8,.4,1); }
 .lq-box > .lq.squish { transform: scaleY(.86); }
-.nfilter.lq-box button, .chips.lq-box span { position: relative; z-index: 1; }
-.nfilter.lq-box button[aria-pressed="true"] { background: transparent; border-color: transparent; }
-.chips.lq-box input:checked + span { background: transparent; border-color: transparent; }
-.nfilter.lq-box button { background: transparent; }
-.nfilter.lq-box button, .chips.lq-box span { transition: color .15s, border-color .25s; }
-.nfilter.lq-box button[aria-pressed="true"], .chips.lq-box input:checked + span { transition: color .25s .18s, border-color .25s; }
+/* chips keep their plain look; the pill on top makes the chosen one black with white text */
+.nfilter.lq-box button, .nfilter.lq-box button[aria-pressed="true"] { background: #fff; border-color: var(--line); color: var(--ink-2); }
+.nfilter.lq-box button[aria-pressed="true"] { color: var(--ink); }
+.nfilter.lq-box button[aria-pressed="true"] small { color: var(--ink-3); }
+.chips.lq-box input:checked + span { background: transparent; border-color: var(--line); color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .lq-box > .lq, .lq-box > .lq.go-r, .lq-box > .lq.go-l { transition: opacity .2s; } }
 
 

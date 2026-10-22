@@ -168,6 +168,21 @@
   var bar = document.querySelector(".nfilter");
   var nav = document.createElement("nav"); nav.className = "pager"; nav.setAttribute("aria-label", "News pages");
   list.parentNode.insertBefore(nav, list.nextSibling);
+  // every card gets the size of the biggest one, and the list keeps the height of a full page,
+  // so the cards and the page numbers stay put when switching pages, filters or language
+  function lock() {
+    var hid = all.map(function (it) { return it.hidden; });
+    list.style.removeProperty("--card-h"); all.forEach(function (it) { it.hidden = false; });
+    var h = 0; all.forEach(function (it) { h = Math.max(h, it.getBoundingClientRect().height); });
+    all.forEach(function (it, i) { it.hidden = hid[i]; });
+    var cs = getComputedStyle(list), cols = cs.gridTemplateColumns.split(" ").filter(Boolean).length || 1, gap = parseFloat(cs.rowGap) || 0, rows = Math.ceil(per / cols);
+    list.style.setProperty("--card-h", Math.ceil(h) + "px");
+    list.style.minHeight = Math.ceil(rows * h + (rows - 1) * gap) + "px";
+  }
+  setTimeout(lock, 0);
+  addEventListener("resize", lock);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(lock);
+  if (window.MutationObserver) new MutationObserver(function () { clearTimeout(lock.t); lock.t = setTimeout(lock, 30); }).observe(list, { childList: true, subtree: true, characterData: true });
   function show(n) {
     var pages = Math.ceil(items.length / per);
     all.forEach(function (it) { it.hidden = true; });
@@ -286,33 +301,4 @@
     liquidChips(ch, function () { return [].slice.call(ch ? ch.querySelectorAll("label > span") : []); }, function (s) { var i = s.previousElementSibling; return !!(i && i.checked); });
   }, 0);
 
-  /* jelly press: the touched spot sinks, the opposite side lifts */
-  var TAP = ".pill, .nav-links a, .lang button, .nfilter button, .chips span, .pager button";
-  var reduceM = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.querySelectorAll(".pill").forEach(function (el) { el.classList.add("tap"); });
-  document.addEventListener("pointerdown", function (e) {
-    if (reduceM) return;
-    var el = e.target.closest(TAP); if (!el) { var lb = e.target.closest(".chips label"); el = lb && lb.querySelector("span"); } if (!el) return;
-    var shape = el, on = true;
-    if (!el.classList.contains("pill")) {   // menu, language, chips: the flowing pill is the shape
-      var box = el.closest(".nav-links, .lang, .lq-box"); shape = box && box.querySelector(":scope > .blob, :scope > .lq");
-      if (!shape) return;
-      var sr = shape.getBoundingClientRect(), er = el.getBoundingClientRect();
-      on = Math.abs(sr.left - er.left) < 6 && Math.abs(sr.right - er.right) < 6;   // only when the pill is already under the finger
-      if (!on) return;
-    }
-    var r = shape.getBoundingClientRect(), w = r.width, h = r.height;
-    var dx = Math.max(-1, Math.min(1, (e.clientX - r.left - w / 2) / (w / 2))), dy = Math.max(-1, Math.min(1, (e.clientY - r.top - h / 2) / (h / 2)));
-    var ay = 9 * Math.min(1, 90 / w) + 5, ax = 16;   // long pills tilt less along their length
-    shape.style.setProperty("--ry", (dx * ay).toFixed(2) + "deg"); shape.style.setProperty("--rx", (-dy * ax).toFixed(2) + "deg");
-    shape.style.setProperty("--pp", Math.max(160, w * 1.6).toFixed(0) + "px"); shape.style.setProperty("--ps", ".965");
-    shape.classList.remove("jelly-out"); shape.classList.add(shape === el ? "pressing" : "jelly"); if (shape === el) el.classList.add("pressing");
-    function up() {
-      shape.style.setProperty("--rx", "0deg"); shape.style.setProperty("--ry", "0deg"); shape.style.setProperty("--ps", "1");
-      el.classList.remove("pressing"); shape.classList.remove("pressing");
-      if (shape !== el) { shape.classList.remove("jelly"); shape.classList.add("jelly-out"); setTimeout(function () { shape.classList.remove("jelly-out"); }, 750); }
-      removeEventListener("pointerup", up); removeEventListener("pointercancel", up);
-    }
-    addEventListener("pointerup", up); addEventListener("pointercancel", up);
-  });
 })();

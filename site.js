@@ -304,6 +304,6 @@
 
   /* papers: show all / show less */
   document.querySelectorAll(".papers-more").forEach(function (b) {
-    b.addEventListener("click", function () { var box = b.closest(".papers"), open = !box.classList.contains("open"); box.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open)); });
+    b.addEventListener("click", function () { var box = b.closest(".papers"), open = !box.classList.contains("open"); box.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open)); b.setAttribute("aria-label", open ? "Show fewer papers" : "Show all papers"); });
   });
 })();

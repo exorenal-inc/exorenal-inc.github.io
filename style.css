@@ -849,3 +849,39 @@ html.snap main > section.phead.ihead:first-child { padding-bottom: 88px !importa
 .world .dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); pointer-events: none; animation: tlNow 1.8s ease-out infinite; }
 .world .dot + .dot::after { animation-delay: .9s; }
 @media (prefers-reduced-motion: reduce) { .world .dot::after { animation: none; display: none; } }
+
+/* Seoul lab: hidden until the Seoul dot on the map is clicked, then slides open under the map */
+.world .dot.seoul { border: 0; padding: 0; cursor: pointer; font: inherit; color: inherit; }
+.world .dot.seoul::before { content: ""; position: absolute; inset: -16px; border-radius: 50%; }
+.world .dot.seoul > span { display: inline-flex; align-items: center; gap: 2px; padding: 4px 6px 4px 10px; border-radius: 999px; background: #fff; box-shadow: 0 2px 10px rgba(14,17,20,.10); transition: background-color .2s, color .2s; }
+.world .dot.seoul > span i { font-style: normal; }
+.world .dot.seoul .ico { position: static; inset: auto; width: 14px; height: 14px; stroke-width: 2.2; transition: rotate .4s var(--ease); }
+.world .dot.seoul:hover > span, .world .dot.seoul[aria-expanded="true"] > span { background: var(--ink); color: #fff; }
+.world .dot.seoul[aria-expanded="true"] .ico { rotate: 180deg; }
+.world .dot.seoul .ico path { stroke: currentColor; stroke-width: 2.2; stroke-dasharray: none; vector-effect: none; }
+.lab-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .8s var(--ease); }
+.lab-panel.open { grid-template-rows: 1fr; }
+.lab-clip { min-height: 0; overflow: hidden; }
+.lab { padding-block: var(--s5) var(--s7); opacity: 0; translate: 0 -24px; transition: opacity .6s var(--ease), translate .8s var(--ease); }
+.lab-panel.open .lab { opacity: 1; translate: none; transition-delay: .15s; }
+.lab .center { margin-bottom: var(--s5); }
+.lab-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-inline: calc((100% - min(900px, 86vw)) / 2); scroll-behavior: smooth; outline-offset: -2px; }
+.lab-track::-webkit-scrollbar { display: none; }
+.lab-slide { flex: 0 0 min(900px, 86vw); margin: 0; scroll-snap-align: center; }
+.lab-slide img { opacity: var(--f, .35); }
+.lab-slide img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--r); background: var(--tile); }
+.lab-slide figcaption { margin-top: var(--s3); text-align: center; font-size: 17px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); text-wrap: balance; padding-inline: var(--s2); opacity: var(--c, 0); }
+.lab-ctl { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: var(--s5); }
+.lab-dots { display: flex; align-items: center; gap: 10px; height: 52px; padding-inline: 22px; border-radius: 999px; background: var(--tile); }
+.lab-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: var(--ink-3); cursor: pointer; transition: width .4s var(--ease), background-color .3s; position: relative; overflow: hidden; }
+.lab-dots button[aria-current="true"] { width: 44px; background: #C9CDD2; }
+.lab-dots button[aria-current="true"]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--ink-2); transform-origin: left; transform: scaleX(0); }
+.lab.run .lab-dots button[aria-current="true"]::after { animation: labfill var(--lab-t, 5s) linear forwards; }
+.lab.done .lab-dots button[aria-current="true"]::after { transform: none; }
+@keyframes labfill { to { transform: scaleX(1); } }
+.lab-play, .lab-close { width: 52px; height: 52px; border: 0; border-radius: 999px; background: var(--tile); color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: background-color .2s; }
+.lab-play:hover, .lab-close:hover { background-color: #E6E8EB; }
+.lab-play .i-play, .lab.run .lab-play .i-pause { display: block; }
+.lab-play .i-pause, .lab.run .lab-play .i-play { display: none; }
+@media (max-width: 760px) { .lab-track { gap: 12px; } .lab-slide img { border-radius: 20px; } .lab-slide figcaption { font-size: 15px; } .lab-dots { gap: 8px; padding-inline: 18px; height: 48px; } .lab-play, .lab-close { width: 48px; height: 48px; } }
+@media (prefers-reduced-motion: reduce) { .lab-panel, .lab, .lab-track { transition: none; scroll-behavior: auto; } .lab-dots button { transition: none; } }

@@ -6,7 +6,7 @@
 <meta name="google" content="notranslate">
 <title>Company · exorenal</title>
 <link rel="preload" href="fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202610231148">
+<link rel="stylesheet" href="style.css?v=202610231604">
 </head>
 <body>
 <nav class="nav" aria-label="Main">
@@ -35,13 +35,29 @@
       <img src="img/world-dots.svg" alt="World map with Baltimore and Seoul marked" width="1200" height="480">
       <svg viewBox="0 0 1200 480" preserveAspectRatio="none" aria-hidden="true"><path d="M344.6 155.7 Q684 30 1022.9 161.7"/></svg>
       <span class="dot" style="--x:28.72%;--y:32.44%"><span data-ko="볼티모어">Baltimore</span></span>
-      <span class="dot" style="--x:85.24%;--y:33.69%"><span data-ko="서울">Seoul</span></span>
+      <button type="button" class="dot seoul" style="--x:85.24%;--y:33.69%" aria-expanded="false" aria-controls="seoul-lab"><span><i data-ko="서울 연구소">Seoul lab</i><svg class="ico" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></button>
     </figure>
     <div class="mission">
       <h2 class="title" data-ko="어디서든, <span>더 편한 투석.</span>">Easier dialysis, <span>anywhere.</span></h2>
       <p class="sub" data-ko="환자와 가족이 일상을 지키면서도 더 좋은 치료를 받을 수 있도록,<br>투석 장비와 서비스를 만들고 있습니다.">We build dialysis systems and services that let patients and their families get better care while protecting their quality of life.</p>
     </div>
   </section>
+
+  <div class="lab-panel" id="seoul-lab" aria-label="Seoul lab">
+   <div class="lab-clip"><div class="lab">
+    <div class="wrap center"><h2 class="title" data-ko="서울 연구소를 <span>소개합니다.</span>">Inside <span>our Seoul lab.</span></h2></div>
+    <div class="lab-track" data-start="3" tabindex="0" aria-label="Lab photos">
+      <figure class="lab-slide"><img src="img/lab/01-overview-1600.webp" srcset="img/lab/01-overview-800.webp 800w, img/lab/01-overview-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Wide view of the Seoul lab" width="1600" loading="lazy" height="900"><figcaption data-ko="실제 소의 혈액으로 실험을 진행하고, 결과는 바로 옆 엔지니어에게 전달됩니다.">We run tests with real bovine blood, and results go straight to the engineers working right next door.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/03-bench-1600.webp" srcset="img/lab/03-bench-800.webp 800w, img/lab/03-bench-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Two lab researchers at a test bench" width="1600" loading="lazy" height="900"><figcaption data-ko="실험 연구원들이 시험대에서 실험을 준비합니다.">Our lab researchers preparing a test at the bench.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/04-cad-1600.webp" srcset="img/lab/04-cad-800.webp 800w, img/lab/04-cad-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Engineer working in 3D CAD" width="1600" loading="lazy" height="900"><figcaption data-ko="3D CAD로 기구를 설계합니다.">Mechanical design in 3D CAD.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/02-meeting-1600.webp" srcset="img/lab/02-meeting-800.webp 800w, img/lab/02-meeting-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Engineering team in a meeting room" width="1600" height="900"><figcaption data-ko="엔지니어링팀 전체가 모이는 주간 설계 검토.">Weekly design review with the whole engineering team.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/05-desk-1600.webp" srcset="img/lab/05-desk-800.webp 800w, img/lab/05-desk-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Lab researcher compiling test data on a laptop" width="1600" loading="lazy" height="900"><figcaption data-ko="실험 연구원이 실험 데이터를 모아 정리합니다.">A lab researcher compiling test data.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/06-solder-1600.webp" srcset="img/lab/06-solder-800.webp 800w, img/lab/06-solder-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Engineer soldering a circuit board" width="1600" loading="lazy" height="900"><figcaption data-ko="회로 기판을 직접 만들고 고칩니다.">Building and repairing circuit boards in house.</figcaption></figure>
+      <figure class="lab-slide"><img src="img/lab/07-talk-1600.webp" srcset="img/lab/07-talk-800.webp 800w, img/lab/07-talk-1600.webp 1600w" sizes="(max-width: 760px) 86vw, 900px" alt="Two people talking in the lab test area" width="1600" loading="lazy" height="900"><figcaption data-ko="장비가 있는 실험 공간, 그 앞은 시제품을 만드는 공간입니다.">The test area with a working unit, and our prototype build space in front of it.</figcaption></figure>
+    </div>
+    <div class="lab-ctl"><div class="lab-dots"><button type="button" aria-label="Photo 1"></button><button type="button" aria-label="Photo 2"></button><button type="button" aria-label="Photo 3"></button><button type="button" aria-label="Photo 4"></button><button type="button" aria-label="Photo 5"></button><button type="button" aria-label="Photo 6"></button><button type="button" aria-label="Photo 7"></button></div><button type="button" class="lab-play" aria-label="Pause"><svg class="ico i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg><svg class="ico i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button><button type="button" class="lab-close" aria-label="Close"><svg class="ico" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button></div>
+   </div></div>
+  </div>
 
   <section id="milestones" class="sec wrap band">
     <div style="display:grid;gap:var(--s2)">
@@ -109,6 +125,6 @@
     </div>
   </div>
 </footer>
-<script src="site.js?v=202610231148"></script>
+<script src="site.js?v=202610231604"></script>
 </body>
 </html>

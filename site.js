@@ -306,4 +306,77 @@
   document.querySelectorAll(".papers-more").forEach(function (b) {
     b.addEventListener("click", function () { var box = b.closest(".papers"), open = !box.classList.contains("open"); box.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open)); b.setAttribute("aria-label", open ? "Show fewer papers" : "Show all papers"); });
   });
+
+  /* Seoul lab gallery: opens from the Seoul dot on the map; loops forever (clones on both sides) */
+  document.querySelectorAll(".lab").forEach(function (sec) {
+    var panel = sec.closest(".lab-panel"), opener = document.querySelector('[aria-controls="' + (panel && panel.id) + '"]'), root = document.documentElement;
+    var track = sec.querySelector(".lab-track"), real = [].slice.call(track.children), N = real.length, dots = [].slice.call(sec.querySelectorAll(".lab-dots button")), play = sec.querySelector(".lab-play"), close = sec.querySelector(".lab-close");
+    function clone(s) { var c = s.cloneNode(true); c.setAttribute("aria-hidden", "true"); c.querySelectorAll("img").forEach(function (i) { i.alt = ""; }); return c; }
+    real.slice().reverse().forEach(function (s) { track.insertBefore(clone(s), track.firstChild); });
+    real.forEach(function (s) { track.appendChild(clone(s)); });
+    var slides = [].slice.call(track.children);
+    var start = N + (+(track.dataset.start || 0)), reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, T = 5000, cur = -1, timer = null, running = !reduce, seen = false, open = !panel, settleT = null;
+    sec.style.setProperty("--lab-t", T / 1000 + "s");
+    function left(i) { var s = slides[i]; return s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2; }
+    function go(i, smooth) { track.scrollTo({ left: left(i), behavior: smooth === false ? "instant" : "smooth" }); }
+    function fade() { // brightness follows the distance from the middle, frame by frame
+      var mid = track.scrollLeft + track.clientWidth / 2, best = 0, bd = 1e9;
+      slides.forEach(function (s, k) {
+        var d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid), r = Math.min(1, d / (s.offsetWidth + 20));
+        s.style.setProperty("--f", (1 - .65 * r).toFixed(3)); s.style.setProperty("--c", Math.max(0, 1 - r * 3).toFixed(3));
+        if (d < bd) { bd = d; best = k; }
+      });
+      return best;
+    }
+    function jump(i) { // swap to the matching slide without any visible move
+      track.style.scrollSnapType = "none"; track.style.scrollBehavior = "auto"; track.scrollLeft = left(i); track.style.scrollSnapType = ""; track.style.scrollBehavior = "";
+      fade(); cur = -1; mark(i, true);
+    }
+    function mark(i, quiet) {
+      if (i === cur) return; cur = i; var k = ((i % N) + N) % N;
+      slides.forEach(function (s, j) { s.classList.toggle("on", j === i); });
+      dots.forEach(function (d, j) { d.setAttribute("aria-current", j === k ? "true" : "false"); });
+      if (running && !quiet) arm();
+    }
+    function settle() { if (cur < N || cur >= 2 * N) jump(N + ((cur % N) + N) % N); }
+    function arm() {
+      clearTimeout(timer); sec.classList.remove("run", "done"); void sec.offsetWidth;
+      if (!running) { sec.classList.add("done"); return; }
+      if (!seen || !open) return;
+      sec.classList.add("run");
+      timer = setTimeout(function () { go(cur + 1); }, T);
+    }
+    function setRun(on) { running = on; play.setAttribute("aria-label", on ? "Pause" : "Play"); arm(); }
+    function toggle(on) {
+      if (!panel) return; open = on;
+      panel.classList.toggle("open", on); opener && opener.setAttribute("aria-expanded", on ? "true" : "false");
+      root.classList.toggle("free", on);
+      if (on) {
+        track.querySelectorAll("img").forEach(function (i) { i.loading = "eager"; });
+        jump(start); running = !reduce; setRun(running);
+        setTimeout(function () { var y = panel.getBoundingClientRect().top + scrollY - 90; scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" }); }, reduce ? 0 : 250);
+      } else {
+        clearTimeout(timer); sec.classList.remove("run");
+        var m = opener && opener.closest("section"); if (m && panel.getBoundingClientRect().top < 0) m.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      }
+    }
+    if (opener) opener.addEventListener("click", function () { toggle(!open); });
+    if (close) close.addEventListener("click", function () { toggle(false); });
+    var raf; track.addEventListener("scroll", function () {
+      cancelAnimationFrame(raf); raf = requestAnimationFrame(function () { mark(fade()); });
+      clearTimeout(settleT); settleT = setTimeout(settle, 160);
+    }, { passive: true });
+    dots.forEach(function (d, k) { d.addEventListener("click", function () { var base = cur - (((cur % N) + N) % N); go(base + k); }); });
+    slides.forEach(function (s, k) { s.addEventListener("click", function () { if (k !== cur) go(k); }); });
+    play.addEventListener("click", function () { setRun(!running); });
+    track.addEventListener("pointerdown", function () { if (running) setRun(false); });
+    track.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); if (running) setRun(false); go(cur + (e.key === "ArrowRight" ? 1 : -1)); }
+    });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) arm(); else { clearTimeout(timer); sec.classList.remove("run"); } }, { threshold: .4 }).observe(track);
+    else seen = true;
+    play.setAttribute("aria-label", running ? "Pause" : "Play");
+    jump(start);
+    addEventListener("resize", function () { jump(cur); });
+  });
 })();

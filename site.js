@@ -78,8 +78,8 @@
   });
 
   /* contact form: sends through FormSubmit (no server needed).
-     Test inbox for now; switch FORM_TO to info@exorenal.com when the exorenal.com domain is connected. */
-  var FORM_TO = "naekyun@exorenal.com";
+     Inquiries go to info@exorenal.com (switched 2026-10-23 when exorenal.com went live). */
+  var FORM_TO = "info@exorenal.com";
   document.addEventListener("submit", function (e) {
     var f = e.target; if (!f.matches("#contact-form")) return;
     e.preventDefault();

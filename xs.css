@@ -23,6 +23,12 @@
 .xs-copy { position: absolute; left: 0; right: 0; display: grid; justify-items: center; text-align: center; gap: var(--s2); padding-inline: 16px; opacity: 0; z-index: 3; }
 .xs-copy h2 { font-size: var(--t-h2, clamp(32px, 4.4vw, 60px)); line-height: 1.04; font-weight: 700; letter-spacing: -.04em; text-wrap: balance; }
 .xs-copy h2 span { color: var(--ink-3); }
+.xs-copy h2 i { font-style: normal; }
+.xs-copy h2 i, .xs-copy h2 span, .xs-copy p { display: inline-block; opacity: 0; transform: translateY(16px); transition: opacity .25s ease, transform .25s ease; }
+.xs-copy.copy-in h2 i, .xs-copy.copy-in h2 span, .xs-copy.copy-in p { opacity: 1; transform: none; transition: opacity 1s cubic-bezier(.25,.1,.25,1), transform 1s cubic-bezier(.22,.61,.36,1); }
+.xs-copy.copy-in h2 span { transition-delay: 1s; }
+.xs-copy.copy-in p { transition-delay: 2s; }
+@media (prefers-reduced-motion: reduce) { .xs-copy h2 i, .xs-copy h2 span, .xs-copy p, .xs-copy.copy-in h2 i, .xs-copy.copy-in h2 span, .xs-copy.copy-in p { transform: none; transition: opacity .3s; transition-delay: 0s; } }
 .xs-copy p { font-size: clamp(16px, 1.4vw, 19px); color: var(--ink-2); max-width: 46ch; text-wrap: balance; }
 .xs-foot { position: absolute; left: 0; right: 0; bottom: calc(var(--s4) + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; align-items: center; gap: var(--s2); font-size: 13px; color: var(--ink-3); z-index: 3; transition: opacity .3s; }
 .xs-foot .bar { width: 160px; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; }

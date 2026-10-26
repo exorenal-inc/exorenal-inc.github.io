@@ -153,11 +153,43 @@
     flat.style.width = L.fw + "px"; flat.style.height = L.fh + "px"; flat.style.left = (L.W - L.fw) / 2 + "px"; flat.style.top = L.fy + "px";
     flat.style.padding = (L.fh * BY) + "px " + (L.fw * BX) + "px";
     flat.style.opacity = seg(p, .79, .81); mach.style.opacity = 1 - seg(p, .81, .86);
-    var co = ease(seg(p, .86, .93)); copy.style.opacity = co; copy.style.transform = "translateY(" + (24 * (1 - co)) + "px)";
+    // the copy comes in one piece at a time: first words, then the rest of the title, then the line below
+    // (timed, not scrolled: once the screen has landed each piece fades in over 1 s, one after another — see xs.css)
+    copy.style.opacity = 1; copy.classList.toggle("copy-in", p > .85);
     bar.style.transform = "scaleX(" + p.toFixed(3) + ")"; foot.style.opacity = p > .78 ? 0 : 1;
   }
+  // ---- the dive plays by itself: once the machine faces front, one scroll down runs it all the way to the screen
+  // (and one scroll up from the screen runs it back). The scroll position is animated, so update() draws every frame.
+  var A = .50, B = .95, DUR = 2600, auto = null, quietUntil = 0, lastP = -1;
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function prog() { var span = sec.offsetHeight - (L.H || innerHeight); return clamp(-sec.getBoundingClientRect().top / (span || 1)); }
+  function yAt(p) { return sec.getBoundingClientRect().top + scrollY + p * (sec.offsetHeight - (L.H || innerHeight)); }
+  function block(e) { if (auto || performance.now() < quietUntil) { if (e.cancelable) e.preventDefault(); } }
+  function blockKey(e) { if ((auto || performance.now() < quietUntil) && /^(ArrowDown|ArrowUp|PageDown|PageUp|Space| |Home|End)$/.test(e.key)) e.preventDefault(); }
+  addEventListener("wheel", block, { passive: false }); addEventListener("touchmove", block, { passive: false }); addEventListener("keydown", blockKey);
+  // time share: the dive into the screen (.56→.81) gets most of the run, the text before/after is quick
+  var DOWN = [[0, A], [.07, .56], [.85, .81], [1, B]], UP = [[0, B], [.2, .81], [.93, .56], [1, A]], K = DOWN;
+  function at(e) { for (var i = 1; i < K.length; i++) if (e <= K[i][0]) { var a = K[i - 1], b = K[i]; return a[1] + (b[1] - a[1]) * (e - a[0]) / (b[0] - a[0]); } return K[K.length - 1][1]; }
+  function inv(p) { for (var i = 1; i < K.length; i++) { var a = K[i - 1], b = K[i]; if ((p - a[1]) * (p - b[1]) <= 0 && a[1] !== b[1]) return a[0] + (b[0] - a[0]) * (p - a[1]) / (b[1] - a[1]); } return 0; }
+  function play(to) {
+    K = to > A ? DOWN : UP;
+    // start from wherever we are now (also from the middle), so the run never jumps
+    var e0 = Math.max(0, Math.min(1, inv(prog()))), t0 = performance.now(), d = reduce ? 0 : DUR * (1 - e0), root = document.documentElement, sb = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto"; auto = { to: to };
+    (function step(now) {
+      var t = d ? Math.min(1, (now - t0) / d) : 1, e = e0 + (1 - e0) * (e0 > 0 ? t * (2 - t) : .5 - Math.cos(Math.PI * t) / 2);
+      scrollTo(0, yAt(at(e))); update();
+      if (t < 1) requestAnimationFrame(step); else { auto = null; root.style.scrollBehavior = sb; quietUntil = performance.now() + 250; lastP = prog(); }
+    })(t0);
+  }
+  // any scroll inside the dive (between the front view and the screen) finishes it in that direction
+  function watch() {
+    if (auto) return; var p = prog();
+    if (lastP >= 0 && performance.now() >= quietUntil && p > A && p < B && Math.abs(p - lastP) > 1e-4) play(p > lastP ? B : A);
+    lastP = p;
+  }
   var tk = false;
-  addEventListener("scroll", function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; update(); }); } }, { passive: true });
+  addEventListener("scroll", function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; update(); watch(); }); } }, { passive: true });
   addEventListener("resize", layout); layout();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   function lang(l) { var s = "img/ui-treat-" + (l === "ko" ? "ko" : "en") + ".webp"; sec.querySelectorAll("img[data-ui]").forEach(function (im) { im.src = s; }); requestAnimationFrame(function () { layout(); dispatchEvent(new Event("scroll")); }); }
